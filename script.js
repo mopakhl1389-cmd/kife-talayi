@@ -1,7 +1,7 @@
 
 "use strict";
 // اتصال به دیتابیس فروشگاه
-const SUPABASE_URL = "آدرس پروژه‌ات";
+const SUPABASE_URL = "https://uystisrtgdxccfafpywq.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "کلید عمومی پروژه‌ات";
 
 const supabaseClient = window.supabase.createClient(
