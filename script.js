@@ -1,5 +1,13 @@
 
 "use strict";
+// اتصال به دیتابیس فروشگاه
+const SUPABASE_URL = "آدرس پروژه‌ات";
+const SUPABASE_PUBLISHABLE_KEY = "کلید عمومی پروژه‌ات";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
 
 /* =====================================
    کیف طلایی - مدیریت فروشگاه
@@ -478,5 +486,22 @@ for (let i = 0; i < 24; i++) {
   particleContainer.append(particle);
 }
 
+// آزمایش اتصال به دیتابیس
+async function testSupabaseConnection() {
+  const { data, error } = await supabaseClient
+    .from("products")
+    .select("*")
+    .limit(1);
+
+  if (error) {
+    console.error("خطای اتصال به دیتابیس:", error.message);
+    showToast("اتصال دیتابیس ناموفق بود؛ کنسول را بررسی کن.");
+    return;
+  }
+
+  console.log("اتصال موفق است:", data);
+}
+
+testSupabaseConnection();
 // نمایش اولیه فروشگاه
 renderProducts();
