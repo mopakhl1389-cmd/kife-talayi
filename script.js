@@ -189,8 +189,15 @@ function createProductCard(product, index) {
   deleteButton.setAttribute("aria-label", `حذف ${product.name}`);
   deleteButton.addEventListener("click", () => deleteProduct(product.id));
 
+if (isAdminLoggedIn) {
   actions.append(editButton, deleteButton);
+}
+
+if (isAdminLoggedIn) {
   bottom.append(price, actions);
+} else {
+  bottom.append(price);
+}
   info.append(bottom);
   card.append(imageBox, info);
 
