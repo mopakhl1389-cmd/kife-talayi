@@ -303,6 +303,7 @@ function renderProducts() {
   const query = $("#searchInput").value.trim().toLocaleLowerCase("fa");
 
   const selectedColor = $("#colorFilter").value;
+  console.log("رنگ انتخابی فیلتر:", selectedColor, "رنگ محصولات:", products.map(p => p.color));
   const minPriceValue = $("#minPriceFilter").value.trim();
   const maxPriceValue = $("#maxPriceFilter").value.trim();
 
