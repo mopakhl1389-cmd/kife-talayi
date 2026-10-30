@@ -297,9 +297,17 @@ if (product.price === null || product.price === "") {
   return card;
 }
 
+
 // نمایش محصولات
 function renderProducts() {
   const query = $("#searchInput").value.trim().toLocaleLowerCase("fa");
+
+  const selectedColor = $("#colorFilter").value;
+  const minPriceValue = $("#minPriceFilter").value.trim();
+  const maxPriceValue = $("#maxPriceFilter").value.trim();
+
+  const minPrice = minPriceValue === "" ? null : Number(minPriceValue);
+  const maxPrice = maxPriceValue === "" ? null : Number(maxPriceValue);
 
   let filtered = products.filter(product => {
     const text = [
@@ -309,20 +317,46 @@ function renderProducts() {
     ].join(" ").toLocaleLowerCase("fa");
 
     const matchesSearch = text.includes(query);
+
     const matchesCategory =
       activeCategory === "همه" || product.category === activeCategory;
+
     const matchesFavorite =
       !favoritesOnly || favorites.includes(product.id);
 
-    return matchesSearch && matchesCategory && matchesFavorite;
+    const matchesColor =
+      !selectedColor || product.color === selectedColor;
+
+    const price = product.price === null || product.price === ""
+      ? null
+      : Number(product.price);
+
+    const discount = Number(product.discount) || 0;
+
+    const finalPrice = price === null
+      ? null
+      : price * (100 - discount) / 100;
+
+    const matchesMinPrice =
+      minPrice === null || (finalPrice !== null && finalPrice >= minPrice);
+
+    const matchesMaxPrice =
+      maxPrice === null || (finalPrice !== null && finalPrice <= maxPrice);
+
+    return matchesSearch &&
+      matchesCategory &&
+      matchesFavorite &&
+      matchesColor &&
+      matchesMinPrice &&
+      matchesMaxPrice;
   });
 
   const sort = $("#sortSelect").value;
 
   if (sort === "cheap") {
-    filtered.sort((a, b) => a.price - b.price);
+    filtered.sort((a, b) => (a.price ?? Infinity) - (b.price ?? Infinity));
   } else if (sort === "expensive") {
-    filtered.sort((a, b) => b.price - a.price);
+    filtered.sort((a, b) => (b.price ?? -Infinity) - (a.price ?? -Infinity));
   } else if (sort === "name") {
     filtered.sort((a, b) => a.name.localeCompare(b.name, "fa"));
   } else {
