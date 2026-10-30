@@ -96,14 +96,17 @@
 
       <div class="category-area">
         <div class="category-label">دسته‌بندی محصولات</div>
-        <div id="categories" class="category-list">
-          <button class="category active" data-category="همه" type="button">همه محصولات</button>
-          <button class="category" data-category="زنانه" type="button">زنانه</button>
-          <button class="category" data-category="مردانه" type="button">مردانه</button>
-          <button class="category" data-category="دستی" type="button">دستی</button>
-          <button class="category" data-category="دوشی" type="button">دوشی</button>
-          <button class="category" data-category="کوله" type="button">کوله</button>
-        </div>
+    <div id="categories" class="category-list">
+  <button class="category active" data-category="همه" type="button">همه محصولات</button>
+  <button class="category" data-category="دستی" type="button">دستی</button>
+  <button class="category" data-category="مجلسی" type="button">مجلسی</button>
+  <button class="category" data-category="دانشجویی" type="button">دانشجویی</button>
+  <button class="category" data-category="کوله_پشتی" type="button">کوله‌پشتی</button>
+  <button class="category" data-category="دوشی" type="button">دوشی</button>
+  <button class="category" data-category="ورزشی" type="button">ورزشی</button>
+  <button class="category" data-category="ساک" type="button">ساک</button>
+  <button class="category" data-category="پاسپورتی" type="button">پاسپورتی</button>
+</div>
       </div>
 
       
@@ -227,7 +230,20 @@
         </div>
         <label for="productStock">تعداد موجودی</label>
 <input id="productStock" type="number" min="0" step="1" value="0" required placeholder="مثلاً 5">
-        <label for="productColor">رنگ محصول</label>
+        <label>رنگ‌های محصول (امکان انتخاب چند رنگ)</label>
+<div id="productColors" style="display:flex;flex-wrap:wrap;gap:12px;margin:10px 0 18px;">
+  <label><input type="checkbox" name="productColors" value="مشکی"> مشکی</label>
+  <label><input type="checkbox" name="productColors" value="قهوه‌ای"> قهوه‌ای</label>
+  <label><input type="checkbox" name="productColors" value="کرم"> کرم</label>
+  <label><input type="checkbox" name="productColors" value="سفید"> سفید</label>
+  <label><input type="checkbox" name="productColors" value="عسلی"> عسلی</label>
+  <label><input type="checkbox" name="productColors" value="سرمه‌ای"> سرمه‌ای</label>
+  <label><input type="checkbox" name="productColors" value="طوسی"> طوسی</label>
+  <label><input type="checkbox" name="productColors" value="قرمز"> قرمز</label>
+  <label><input type="checkbox" name="productColors" value="صورتی"> صورتی</label>
+  <label><input type="checkbox" name="productColors" value="سبز"> سبز</label>
+  <label><input type="checkbox" name="productColors" value="سایر"> سایر</label>
+</div>
 <select id="productColor">
   <option value="">انتخاب رنگ</option>
   <option value="مشکی">مشکی</option>
@@ -243,11 +259,17 @@
   <option value="سایر">سایر</option>
 </select>
         <label for="productCategory">دسته‌بندی</label>
-        <select id="productCategory" required>
-          <option value="">انتخاب دسته‌بندی</option>
-          <option value="زنانه">زنانه</option><option value="مردانه">مردانه</option>
-          <option value="دستی">دستی</option><option value="دوشی">دوشی</option><option value="کوله">کوله</option>
-        </select>
+      <select id="productCategory" required>
+  <option value="">انتخاب دسته‌بندی</option>
+  <option value="دستی">دستی</option>
+  <option value="مجلسی">مجلسی</option>
+  <option value="دانشجویی">دانشجویی</option>
+  <option value="کوله_پشتی">کوله‌پشتی</option>
+  <option value="دوشی">دوشی</option>
+  <option value="ورزشی">ورزشی</option>
+  <option value="ساک">ساک</option>
+  <option value="پاسپورتی">پاسپورتی</option>
+</select>
         <label for="productDescription">توضیحات محصول</label>
         <textarea id="productDescription" rows="4" placeholder="توضیحات کوتاه درباره محصول..."></textarea>
         <label for="productImages">تصاویر محصول (حداکثر ۵ عکس)</label>
