@@ -1,225 +1,270 @@
-
 "use strict";
-// اتصال به دیتابیس فروشگاه
+
+// تنظیمات Supabase
 const SUPABASE_URL = "https://uystisrtgdxccfafpywq.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_YD1PiOewdGcb-EgijEiRFg_yJyF4Jqo";
+
+// کلید عمومی قبلی خودت را اینجا قرار بده
+const SUPABASE_PUBLISHABLE_KEY = "کلید_عمومی_قبلی_خودت";
+
+const ADMIN_UID = "6f42f9ba-fae7-42f0-a062-bb3eec8aa99d";
+const BUCKET = "product-images";
 
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_PUBLISHABLE_KEY
 );
 
-/* =====================================
-   کیف طلایی - مدیریت فروشگاه
-   ===================================== */
-
-const STORAGE_KEY = "kif-talayi-products-v1";
-
-const $ = (selector) => document.querySelector(selector);
+const $ = selector => document.querySelector(selector);
+const money = new Intl.NumberFormat("fa-IR");
 
 const productGrid = $("#productGrid");
-const emptyState = $("#emptyState");
 const productModal = $("#productModal");
 const productForm = $("#productForm");
-const imageInput = $("#productImage");
-const imagePreview = $("#imagePreview");
-const previewImg = $("#previewImg");
+const loginModal = $("#loginModal");
 const toast = $("#toast");
-
-const money = new Intl.NumberFormat("fa-IR");
-const categoryNames = {
-  "دستی": "کیف دستی",
-  "دوشی": "کیف دوشی",
-  "مجلسی": "کیف مجلسی",
-  "کوله": "کوله‌پشتی",
-  "سایر": "سایر"
-};
-
-// محصولات نمونه برای شروع کار
-const demoProducts = [
-  {
-    id: "demo-1",
-    name: "کیف دستی کلاسیک",
-    price: 1250000,
-    category: "دستی",
-    description: "یک انتخاب شیک برای استفاده روزمره.",
-    image: "",
-    createdAt: 3
-  },
-  {
-    id: "demo-2",
-    name: "کیف دوشی مدرن",
-    price: 980000,
-    category: "دوشی",
-    description: "طراحی ساده و مناسب استایل روزانه.",
-    image: "",
-    createdAt: 2
-  },
-  {
-    id: "demo-3",
-    name: "کیف مجلسی خاص",
-    price: 1650000,
-    category: "مجلسی",
-    description: "انتخابی جذاب برای مهمانی‌ها.",
-    image: "",
-    createdAt: 1
-  }
-];
 
 let products = [];
 let activeCategory = "همه";
-let selectedImage = "";
-let toastTimeout;
+let favoritesOnly = false;
+let favorites = JSON.parse(localStorage.getItem("golden-favorites") || "[]");
 let isAdminLoggedIn = false;
+let selectedFiles = [];
+let currentImages = [];
+let toastTimer;
 
-// بارگذاری محصولات ذخیره‌شده
-function loadProducts() {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-
-    if (saved !== null) {
-      const parsed = JSON.parse(saved);
-      if (Array.isArray(parsed)) return parsed;
-    }
-  } catch (error) {
-    console.error("خواندن محصولات ناموفق بود:", error);
-  }
-
-  return demoProducts.map(product => ({ ...product }));
-}
-
-// ذخیره محصولات در مرورگر
-function saveProducts() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
-    return true;
-  } catch (error) {
-    console.error("ذخیره محصولات ناموفق بود:", error);
-    showToast("فضای ذخیره‌سازی کافی نیست. عکس کوچک‌تری انتخاب کن.");
-    return false;
-  }
-}
-
-// پیام کوتاه پایین صفحه
 function showToast(message) {
   toast.textContent = message;
   toast.classList.add("show");
-
-  clearTimeout(toastTimeout);
-  toastTimeout = setTimeout(() => {
-    toast.classList.remove("show");
-  }, 2800);
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("show"), 3000);
 }
 
-// ساخت عنصر متنی امن
-function makeText(tag, className, text) {
-  const element = document.createElement(tag);
-  element.className = className;
-  element.textContent = text;
-  return element;
-}
-
-// نمایش قیمت
 function formatPrice(price) {
-  return money.format(price) + " تومان";
+  return money.format(Number(price) || 0) + " تومان";
 }
 
-// ساخت کارت محصول
-function createProductCard(product, index) {
-  const card = document.createElement("article");
-  card.className = "product-card";
-  card.style.animationDelay = `${Math.min(index, 8) * 45}ms`;
+function getImages(product) {
+  if (Array.isArray(product.images) && product.images.length) {
+    return product.images;
+  }
+  if (product.image) return [product.image];
+  return [];
+}
 
-  const imageBox = document.createElement("div");
-  imageBox.className = "product-image";
+function saveFavorites() {
+  localStorage.setItem("golden-favorites", JSON.stringify(favorites));
+}
 
-  if (product.image) {
-    const image = document.createElement("img");
-    image.src = product.image;
-    image.alt = product.name;
-    image.loading = "lazy";
+function closeProductModal() {
+  productModal.hidden = true;
+  document.body.style.overflow = "";
+}
 
-    image.addEventListener("error", () => {
-      image.replaceWith(makeText("div", "image-placeholder", "✦"));
-    });
+function closeLoginModal() {
+  loginModal.hidden = true;
+  document.body.style.overflow = "";
+}
 
-    imageBox.append(image);
-  } else {
-    imageBox.append(makeText("div", "image-placeholder", "✦"));
+function openLoginModal() {
+  loginModal.hidden = false;
+  document.body.style.overflow = "hidden";
+}
+
+function openProductModal() {
+  productModal.hidden = false;
+  document.body.style.overflow = "hidden";
+}
+
+function updateAdminButton() {
+  const button = $("#openAdmin");
+  button.textContent = isAdminLoggedIn ? "خروج مدیر" : "⚙ مدیریت";
+}
+
+async function loadProductsFromDatabase() {
+  const { data, error } = await supabaseClient
+    .from("products")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error(error);
+    showToast("دریافت محصولات ناموفق بود.");
+    return;
   }
 
-  const category = makeText(
-    "span",
-    "product-category",
-    categoryNames[product.category] || "سایر"
-  );
-  imageBox.append(category);
+  products = (data || []).map(item => ({
+    ...item,
+    id: String(item.id),
+    images: Array.isArray(item.images) ? item.images : [],
+    image: item.image || "",
+    createdAt: new Date(item.created_at).getTime()
+  }));
+
+  renderProducts();
+}
+
+function createProductCard(product) {
+  const card = document.createElement("article");
+  card.className = "product-card";
+
+  const gallery = document.createElement("div");
+  gallery.className = "product-gallery";
+
+  const images = getImages(product);
+  let imageIndex = 0;
+
+  const image = document.createElement("img");
+  image.className = "product-image";
+  image.alt = product.name;
+  image.loading = "lazy";
+
+  if (images.length) {
+    image.src = images[0];
+  } else {
+    image.alt = "عکسی برای این محصول ثبت نشده است";
+    image.style.objectFit = "contain";
+  }
+
+  gallery.append(image);
+
+  if (images.length > 1) {
+    const controls = document.createElement("div");
+    controls.className = "gallery-controls";
+
+    const previous = document.createElement("button");
+    previous.type = "button";
+    previous.textContent = "›";
+
+    const next = document.createElement("button");
+    next.type = "button";
+    next.textContent = "‹";
+
+    previous.addEventListener("click", () => {
+      imageIndex = (imageIndex - 1 + images.length) % images.length;
+      image.src = images[imageIndex];
+    });
+
+    next.addEventListener("click", () => {
+      imageIndex = (imageIndex + 1) % images.length;
+      image.src = images[imageIndex];
+    });
+
+    controls.append(previous, next);
+    gallery.append(controls);
+  }
+
+  const discount = Number(product.discount) || 0;
+
+  if (discount > 0) {
+    const badge = document.createElement("span");
+    badge.className = "discount-badge";
+    badge.textContent = `${money.format(discount)}٪ تخفیف`;
+    gallery.append(badge);
+  }
+
+  const favorite = document.createElement("button");
+  favorite.type = "button";
+  favorite.className = "favorite-button";
+  favorite.textContent = favorites.includes(product.id) ? "♥" : "♡";
+  favorite.classList.toggle("active", favorites.includes(product.id));
+  favorite.setAttribute("aria-label", "افزودن به علاقه‌مندی‌ها");
+
+  favorite.addEventListener("click", () => {
+    if (favorites.includes(product.id)) {
+      favorites = favorites.filter(id => id !== product.id);
+    } else {
+      favorites.push(product.id);
+    }
+
+    saveFavorites();
+    renderProducts();
+  });
+
+  gallery.append(favorite);
 
   const info = document.createElement("div");
   info.className = "product-info";
 
-  info.append(makeText("h3", "product-name", product.name));
+  const title = document.createElement("h3");
+  title.textContent = product.name;
 
-  info.append(makeText(
-    "p",
-    "product-description",
-    product.description || "برای اطلاعات بیشتر با فروشگاه تماس بگیرید."
-  ));
-
-  const bottom = document.createElement("div");
-  bottom.className = "product-bottom";
+  const description = document.createElement("p");
+  description.textContent = product.description || "برای اطلاعات بیشتر پیام بده.";
 
   const price = document.createElement("div");
   price.className = "product-price";
-  price.append(document.createTextNode(formatPrice(product.price)));
-  price.append(makeText("small", "", "قیمت نهایی محصول"));
+
+  const finalPrice = Number(product.price) * (100 - discount) / 100;
+  price.textContent = formatPrice(finalPrice);
+
+  if (discount > 0) {
+    const oldPrice = document.createElement("span");
+    oldPrice.className = "old-price";
+    oldPrice.textContent = formatPrice(product.price);
+    price.append(oldPrice);
+  }
 
   const actions = document.createElement("div");
-  actions.className = "product-actions";
+  actions.className = "card-actions";
 
-  const editButton = makeText("button", "icon-button", "✎");
-  editButton.type = "button";
-  editButton.title = "ویرایش محصول";
-  editButton.setAttribute("aria-label", `ویرایش ${product.name}`);
-  editButton.addEventListener("click", () => openEditModal(product.id));
+  const order = document.createElement("a");
+  order.className = "button";
+  order.textContent = "سفارش در ایتا";
+  order.href = "https://web.eitaa.com/#@Abediny1365";
+  order.target = "_blank";
+  order.rel = "noopener";
 
-  const deleteButton = makeText("button", "icon-button delete", "×");
-  deleteButton.type = "button";
-  deleteButton.title = "حذف محصول";
-  deleteButton.setAttribute("aria-label", `حذف ${product.name}`);
-  deleteButton.addEventListener("click", () => deleteProduct(product.id));
+  actions.append(order);
 
-if (isAdminLoggedIn) {
-  actions.append(editButton, deleteButton);
-}
+  const call = document.createElement("a");
+  call.className = "button secondary";
+  call.textContent = "تماس";
+  call.href = "tel:09126531424";
+  actions.append(call);
 
-if (isAdminLoggedIn) {
-  bottom.append(price, actions);
-} else {
-  bottom.append(price);
-}
-  info.append(bottom);
-  card.append(imageBox, info);
+  info.append(title, description, price, actions);
 
+  if (isAdminLoggedIn) {
+    const adminActions = document.createElement("div");
+    adminActions.className = "admin-actions";
+
+    const edit = document.createElement("button");
+    edit.className = "button secondary";
+    edit.type = "button";
+    edit.textContent = "ویرایش";
+    edit.addEventListener("click", () => openEditModal(product));
+
+    const remove = document.createElement("button");
+    remove.className = "button secondary";
+    remove.type = "button";
+    remove.textContent = "حذف";
+    remove.addEventListener("click", () => deleteProduct(product.id));
+
+    adminActions.append(edit, remove);
+    info.append(adminActions);
+  }
+
+  card.append(gallery, info);
   return card;
 }
 
-// نمایش محصولات با توجه به جست‌وجو و فیلتر
 function renderProducts() {
   const query = $("#searchInput").value.trim().toLocaleLowerCase("fa");
 
   let filtered = products.filter(product => {
-    const searchableText = [
+    const text = [
       product.name,
       product.description,
-      categoryNames[product.category] || product.category
+      product.category
     ].join(" ").toLocaleLowerCase("fa");
 
-    const matchesSearch = searchableText.includes(query);
+    const matchesSearch = text.includes(query);
     const matchesCategory =
       activeCategory === "همه" || product.category === activeCategory;
+    const matchesFavorite =
+      !favoritesOnly || favorites.includes(product.id);
 
-    return matchesSearch && matchesCategory;
+    return matchesSearch && matchesCategory && matchesFavorite;
   });
 
   const sort = $("#sortSelect").value;
@@ -236,148 +281,117 @@ function renderProducts() {
 
   productGrid.replaceChildren();
 
-  filtered.forEach((product, index) => {
-    productGrid.append(createProductCard(product, index));
+  filtered.forEach(product => {
+    productGrid.append(createProductCard(product));
   });
 
   $("#resultCount").textContent = money.format(filtered.length);
   $("#heroCount").textContent = money.format(products.length);
 
-  emptyState.hidden = filtered.length !== 0;
+  $("#emptyState").hidden = filtered.length > 0;
   productGrid.hidden = filtered.length === 0;
 }
 
-// بازکردن فرم برای محصول جدید
-function openAddModal() {
+function resetProductForm() {
   productForm.reset();
   $("#productId").value = "";
-  $("#modalTitle").textContent = "افزودن محصول جدید";
-  $("#saveProduct").innerHTML = 'ذخیره محصول <span>←</span>';
-
-  selectedImage = "";
-  imageInput.value = "";
-  imagePreview.hidden = true;
-  previewImg.removeAttribute("src");
-
-  productModal.hidden = false;
-  document.body.style.overflow = "hidden";
-  $("#productName").focus();
+  $("#productDiscount").value = "0";
+  $("#modalTitle").textContent = "افزودن محصول";
+  selectedFiles = [];
+  currentImages = [];
+  $("#adminImagePreview").replaceChildren();
+  $("#productImages").value = "";
 }
 
-// بازکردن فرم برای ویرایش محصول
-function openEditModal(id) {
-  const product = products.find(item => item.id === id);
-  if (!product) return;
-
-  productForm.reset();
+function openEditModal(product) {
+  resetProductForm();
 
   $("#productId").value = product.id;
   $("#productName").value = product.name;
   $("#productPrice").value = product.price;
+  $("#productDiscount").value = product.discount || 0;
   $("#productCategory").value = product.category;
   $("#productDescription").value = product.description || "";
-
   $("#modalTitle").textContent = "ویرایش محصول";
-  $("#saveProduct").innerHTML = 'ذخیره تغییرات <span>←</span>';
 
-  selectedImage = product.image || "";
-  imageInput.value = "";
+  currentImages = getImages(product).slice();
 
-  if (selectedImage) {
-    previewImg.src = selectedImage;
-    imagePreview.hidden = false;
-  } else {
-    imagePreview.hidden = true;
-    previewImg.removeAttribute("src");
-  }
+  currentImages.forEach(url => {
+    const img = document.createElement("img");
+    img.src = url;
+    img.alt = "عکس فعلی محصول";
+    $("#adminImagePreview").append(img);
+  });
 
-  productModal.hidden = false;
-  document.body.style.overflow = "hidden";
-  $("#productName").focus();
+  openProductModal();
 }
 
-// بستن فرم
-function closeModal() {
-  productModal.hidden = true;
-  document.body.style.overflow = "";
+async function uploadImages(files) {
+  const uploadedUrls = [];
+
+  for (const file of files) {
+    const extension = file.name.split(".").pop().toLowerCase();
+    const path = `${Date.now()}-${crypto.randomUUID()}.${extension}`;
+
+    const { error } = await supabaseClient.storage
+      .from(BUCKET)
+      .upload(path, file, {
+        cacheControl: "3600",
+        upsert: false,
+        contentType: file.type
+      });
+
+    if (error) throw error;
+
+    const { data } = supabaseClient.storage
+      .from(BUCKET)
+      .getPublicUrl(path);
+
+    uploadedUrls.push(data.publicUrl);
+  }
+
+  return uploadedUrls;
 }
 
+$("#productImages").addEventListener("change", event => {
+  const files = Array.from(event.target.files || []);
 
-async function deleteProduct(id) {
-  if (!isAdminLoggedIn) {
-    showToast("ابتدا وارد حساب مدیر شو.");
+  if (files.length > 5) {
+    showToast("حداکثر ۵ عکس انتخاب کن.");
+    event.target.value = "";
+    selectedFiles = [];
     return;
   }
 
-  const product = products.find(item => item.id === id);
-  if (!product) return;
+  const allowed = ["image/jpeg", "image/png", "image/webp"];
 
-  const confirmed = window.confirm(
-    `محصول «${product.name}» حذف شود؟`
-  );
+  for (const file of files) {
+    if (!allowed.includes(file.type)) {
+      showToast("فقط عکس JPG، PNG یا WEBP انتخاب کن.");
+      event.target.value = "";
+      selectedFiles = [];
+      return;
+    }
 
-  if (!confirmed) return;
-
-  const { error } = await supabaseClient
-    .from("products")
-    .delete()
-    .eq("id", id);
-
-  if (error) {
-    console.error("خطای حذف:", error.message);
-    showToast("حذف محصول ناموفق بود.");
-    return;
+    if (file.size > 2 * 1024 * 1024) {
+      showToast("حجم هر عکس باید کمتر از ۲ مگابایت باشد.");
+      event.target.value = "";
+      selectedFiles = [];
+      return;
+    }
   }
 
-  products = products.filter(item => item.id !== id);
-  renderProducts();
-  showToast("محصول با موفقیت حذف شد.");
-}
+  selectedFiles = files;
+  $("#adminImagePreview").replaceChildren();
 
-// انتخاب عکس و تبدیل آن برای ذخیره محلی
-imageInput.addEventListener("change", () => {
-  const file = imageInput.files[0];
-  if (!file) return;
-
-  const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
-
-  if (!allowedTypes.includes(file.type)) {
-    imageInput.value = "";
-    showToast("لطفاً عکس JPG، PNG یا WEBP انتخاب کن.");
-    return;
-  }
-
-  if (file.size > 2 * 1024 * 1024) {
-    imageInput.value = "";
-    showToast("حجم عکس باید کمتر از ۲ مگابایت باشد.");
-    return;
-  }
-
-  const reader = new FileReader();
-
-  reader.onload = () => {
-    selectedImage = reader.result;
-    previewImg.src = selectedImage;
-    imagePreview.hidden = false;
-  };
-
-  reader.onerror = () => {
-    showToast("خواندن عکس ناموفق بود.");
-  };
-
-  reader.readAsDataURL(file);
+  files.forEach(file => {
+    const img = document.createElement("img");
+    img.src = URL.createObjectURL(file);
+    img.alt = "پیش‌نمایش عکس جدید";
+    $("#adminImagePreview").append(img);
+  });
 });
 
-// حذف عکس انتخاب‌شده
-$("#removeImage").addEventListener("click", () => {
-  selectedImage = "";
-  imageInput.value = "";
-  previewImg.removeAttribute("src");
-  imagePreview.hidden = true;
-});
-
-
-// ذخیره محصول جدید یا ویرایش محصول قبلی
 productForm.addEventListener("submit", async event => {
   event.preventDefault();
 
@@ -386,36 +400,48 @@ productForm.addEventListener("submit", async event => {
     return;
   }
 
+  const id = $("#productId").value;
   const name = $("#productName").value.trim();
   const price = Number($("#productPrice").value);
+  const discount = Number($("#productDiscount").value);
   const category = $("#productCategory").value;
   const description = $("#productDescription").value.trim();
-  const id = $("#productId").value;
-
-  if (!name) {
-    showToast("نام محصول را وارد کن.");
-    return;
-  }
-
-  if (
-    $("#productPrice").value.trim() === "" ||
-    !Number.isFinite(price) ||
-    price < 0
-  ) {
-    showToast("قیمت واردشده معتبر نیست.");
-    return;
-  }
-
   const saveButton = $("#saveProduct");
+
+  if (!name || !Number.isFinite(price) || price < 0) {
+    showToast("نام و قیمت محصول را درست وارد کن.");
+    return;
+  }
+
+  if (!Number.isFinite(discount) || discount < 0 || discount > 99) {
+    showToast("تخفیف باید بین صفر تا ۹۹ باشد.");
+    return;
+  }
+
+  if (selectedFiles.length && currentImages.length + selectedFiles.length > 5) {
+    showToast("مجموع عکس‌های محصول نباید بیشتر از ۵ تا باشد.");
+    return;
+  }
+
   saveButton.disabled = true;
+  saveButton.textContent = "در حال ذخیره...";
 
   try {
+    let images = currentImages.slice();
+
+    if (selectedFiles.length) {
+      const uploaded = await uploadImages(selectedFiles);
+      images = uploaded;
+    }
+
     const productData = {
       name,
       price,
+      discount,
       category,
       description,
-      image: selectedImage
+      images,
+      image: images[0] || ""
     };
 
     let result;
@@ -438,177 +464,164 @@ productForm.addEventListener("submit", async event => {
     if (result.error) throw result.error;
 
     await loadProductsFromDatabase();
-
-    closeModal();
+    closeProductModal();
     showToast(id ? "تغییرات ذخیره شد." : "محصول جدید اضافه شد.");
+    resetProductForm();
 
   } catch (error) {
     console.error("خطای ذخیره محصول:", error);
-    showToast("ذخیره محصول ناموفق بود. دوباره تلاش کن.");
+    showToast("ذخیره ناموفق بود: " + (error.message || "خطای نامشخص"));
   } finally {
     saveButton.disabled = false;
+    saveButton.textContent = "ذخیره محصول";
   }
 });
 
+async function deleteProduct(id) {
+  if (!isAdminLoggedIn) {
+    showToast("ابتدا وارد حساب مدیر شو.");
+    return;
+  }
 
-// بازکردن پنل مدیریت
-$("#openAdmin").addEventListener("click", openLoginModal);
+  const product = products.find(item => item.id === id);
+  if (!product) return;
 
-// بستن پنجره با دکمه‌ها و پس‌زمینه
-document.querySelectorAll("[data-close-modal]").forEach(element => {
-  element.addEventListener("click", closeModal);
+  if (!confirm(`محصول «${product.name}» حذف شود؟`)) return;
+
+  const { error } = await supabaseClient
+    .from("products")
+    .delete()
+    .eq("id", Number(id));
+
+  if (error) {
+    console.error(error);
+    showToast("حذف محصول ناموفق بود.");
+    return;
+  }
+
+  products = products.filter(item => item.id !== id);
+  renderProducts();
+  showToast("محصول حذف شد.");
+}
+
+// ورود مدیر
+$("#loginForm").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  const email = $("#adminEmail").value.trim();
+  const password = $("#adminPassword").value;
+
+  const { data, error } = await supabaseClient.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    showToast("ایمیل یا رمز عبور اشتباه است.");
+    return;
+  }
+
+  if (data.user.id !== ADMIN_UID) {
+    await supabaseClient.auth.signOut();
+    showToast("این حساب اجازه مدیریت فروشگاه را ندارد.");
+    return;
+  }
+
+  isAdminLoggedIn = true;
+  closeLoginModal();
+  updateAdminButton();
+  renderProducts();
+  showToast("ورود مدیر موفق بود.");
+  openProductModal();
 });
 
-// بستن با کلید Escape
+// بررسی نشست قبلی مدیر
+async function checkAdminSession() {
+  const { data } = await supabaseClient.auth.getSession();
+  const user = data.session?.user;
+
+  if (user && user.id === ADMIN_UID) {
+    isAdminLoggedIn = true;
+  } else {
+    isAdminLoggedIn = false;
+  }
+
+  updateAdminButton();
+  renderProducts();
+}
+
+$("#openAdmin").addEventListener("click", async () => {
+  if (isAdminLoggedIn) {
+    await supabaseClient.auth.signOut();
+    isAdminLoggedIn = false;
+    updateAdminButton();
+    renderProducts();
+    showToast("از حساب مدیر خارج شدی.");
+  } else {
+    openLoginModal();
+  }
+});
+
+// بستن پنجره‌ها
+document.querySelectorAll("[data-close-modal]").forEach(button => {
+  button.addEventListener("click", closeProductModal);
+});
+
+document.querySelectorAll("[data-close-login]").forEach(button => {
+  button.addEventListener("click", closeLoginModal);
+});
+
 document.addEventListener("keydown", event => {
-  if (event.key === "Escape" && !productModal.hidden) {
-    closeModal();
+  if (event.key === "Escape") {
+    closeProductModal();
+    closeLoginModal();
   }
 });
 
-// جست‌وجوی زنده
+// جست‌وجو و مرتب‌سازی
 $("#searchInput").addEventListener("input", renderProducts);
-
-// مرتب‌سازی
 $("#sortSelect").addEventListener("change", renderProducts);
 
-// انتخاب دسته‌بندی
 $("#categories").addEventListener("click", event => {
   const button = event.target.closest("[data-category]");
   if (!button) return;
 
   activeCategory = button.dataset.category;
 
-  document.querySelectorAll(".category").forEach(categoryButton => {
-    categoryButton.classList.toggle("active", categoryButton === button);
+  document.querySelectorAll(".category").forEach(item => {
+    item.classList.toggle("active", item === button);
   });
 
   renderProducts();
 });
 
-// پاک‌کردن جست‌وجو و فیلتر
+$("#favoritesFilter").addEventListener("click", () => {
+  favoritesOnly = !favoritesOnly;
+  $("#favoritesFilter").textContent = favoritesOnly
+    ? "نمایش همه محصولات"
+    : "♡ علاقه‌مندی‌ها";
+
+  renderProducts();
+});
+
 $("#clearSearch").addEventListener("click", () => {
   $("#searchInput").value = "";
   activeCategory = "همه";
+  favoritesOnly = false;
   $("#sortSelect").value = "newest";
+  $("#favoritesFilter").textContent = "♡ علاقه‌مندی‌ها";
 
-  document.querySelectorAll(".category").forEach(button => {
-    button.classList.toggle(
-      "active",
-      button.dataset.category === "همه"
-    );
+  document.querySelectorAll(".category").forEach(item => {
+    item.classList.toggle("active", item.dataset.category === "همه");
   });
 
   renderProducts();
-  $("#products").scrollIntoView({ behavior: "smooth" });
 });
 
-// ذرات تزئینی پس‌زمینه
-const particleContainer = $("#particles");
-
-for (let i = 0; i < 24; i++) {
-  const particle = document.createElement("span");
-  particle.className = "particle";
-  particle.style.left = `${(i * 37 + 11) % 100}%`;
-  particle.style.top = `${(i * 53 + 7) % 100}%`;
-  particle.style.animationDelay = `${(i % 9) * -0.8}s`;
-  particle.style.animationDuration = `${6 + (i % 7)}s`;
-  particleContainer.append(particle);
+// شروع فروشگاه
+async function startStore() {
+  await checkAdminSession();
+  await loadProductsFromDatabase();
 }
 
-
-// ورود مدیر فروشگاه
-const loginModal = $("#loginModal");
-const loginForm = $("#loginForm");
-
-function openLoginModal() {
-  loginForm.reset();
-  loginModal.hidden = false;
-  document.body.style.overflow = "hidden";
-  $("#adminEmail").focus();
-}
-
-function closeLoginModal() {
-  loginModal.hidden = true;
-  document.body.style.overflow = "";
-}
-
-// بستن پنجره ورود
-document.querySelectorAll("[data-close-login]").forEach(element => {
-  element.addEventListener("click", closeLoginModal);
-});
-
-// بررسی اطلاعات ورود مدیر
-loginForm.addEventListener("submit", async event => {
-  event.preventDefault();
-
-  const email = $("#adminEmail").value.trim();
-  const password = $("#adminPassword").value;
-
-  const submitButton = loginForm.querySelector('[type="submit"]');
-  submitButton.disabled = true;
-  submitButton.textContent = "در حال بررسی...";
-
-  try {
-    const { data, error } = await supabaseClient.auth.signInWithPassword({
-      email,
-      password
-    });
-
-    if (error) throw error;
-
-    // فقط حساب مدیر اصلی اجازه ورود به پنل دارد
-    if (data.user.id !== "6f42f9ba-fae7-42f0-a062-bb3eec8aa99d") {
-      await supabaseClient.auth.signOut();
-      showToast("این حساب اجازه مدیریت فروشگاه را ندارد.");
-      return;
-    }
-
-  isAdminLoggedIn = true;
-
-closeLoginModal();
-renderProducts();
-showToast("ورود مدیر موفق بود.");
-openAddModal();
-
-  } catch (error) {
-    console.error("خطای ورود:", error.message);
-    showToast("ایمیل یا رمز عبور اشتباه است.");
-  } finally {
-    submitButton.disabled = false;
-    submitButton.textContent = "ورود به مدیریت ←";
-  }
-});
-
-
-// دریافت محصولات از دیتابیس Supabase
-async function loadProductsFromDatabase() {
-  productGrid.hidden = true;
-
-  const { data, error } = await supabaseClient
-    .from("products")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  if (error) {
-    console.error("خطای دریافت محصولات:", error.message);
-    showToast("دریافت محصولات ناموفق بود.");
-    return;
-  }
-
-  products = data.map(item => ({
-    id: String(item.id),
-    name: item.name,
-    price: Number(item.price),
-    category: item.category,
-    description: item.description || "",
-    image: item.image || "",
-    createdAt: new Date(item.created_at).getTime()
-  }));
-
-  renderProducts();
-}
-
-// نمایش اولیه فروشگاه
-loadProductsFromDatabase();
-
+startStore();
