@@ -41,7 +41,10 @@ function showToast(message) {
 }
 
 function formatPrice(price) {
-  return money.format(Number(price) || 0) + " تومان";
+  if (price === null || price === undefined || price === "") {
+    return "قیمت: ــ";
+  }
+  return money.format(Number(price)) + " تومان";
 }
 
 function getImages(product) {
@@ -204,8 +207,12 @@ function createProductCard(product) {
   const price = document.createElement("div");
   price.className = "product-price";
 
+if (product.price === null || product.price === "") {
+  price.textContent = "قیمت: ــ";
+} else {
   const finalPrice = Number(product.price) * (100 - discount) / 100;
   price.textContent = formatPrice(finalPrice);
+}
 
   if (discount > 0) {
     const oldPrice = document.createElement("span");
@@ -420,16 +427,17 @@ productForm.addEventListener("submit", async event => {
 
   const id = $("#productId").value;
   const name = $("#productName").value.trim();
-  const price = Number($("#productPrice").value);
+  const priceValue = $("#productPrice").value.trim();
+const price = priceValue === "" ? null : Number(priceValue);
   const discount = Number($("#productDiscount").value);
   const category = $("#productCategory").value;
   const description = $("#productDescription").value.trim();
   const saveButton = $("#saveProduct");
 
-  if (!name || !Number.isFinite(price) || price < 0) {
-    showToast("نام و قیمت محصول را درست وارد کن.");
-    return;
-  }
+  if (!name || (price !== null && (!Number.isFinite(price) || price < 0))) {
+  showToast("نام یا قیمت محصول درست نیست.");
+  return;
+}
 
   if (!Number.isFinite(discount) || discount < 0 || discount > 99) {
     showToast("تخفیف باید بین صفر تا ۹۹ باشد.");
