@@ -542,9 +542,12 @@ loginForm.addEventListener("submit", async event => {
       return;
     }
 
-    closeLoginModal();
-    showToast("ورود مدیر موفق بود.");
-    openAddModal();
+  isAdminLoggedIn = true;
+
+closeLoginModal();
+renderProducts();
+showToast("ورود مدیر موفق بود.");
+openAddModal();
 
   } catch (error) {
     console.error("خطای ورود:", error.message);
