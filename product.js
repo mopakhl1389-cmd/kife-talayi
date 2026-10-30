@@ -110,6 +110,46 @@ function showProduct(product) {
             href="tel:${PHONE_NUMBER}"
           >تماس با فروشگاه</a>
         </div>
+              <section class="detail-info" id="reviewsSection">
+        <h2>نظرات و امتیاز مشتریان</h2>
+
+        <div id="reviewsList">در حال دریافت نظرات...</div>
+
+        <h3>ثبت نظر شما</h3>
+
+        <form id="reviewForm">
+          <label for="reviewName">نام شما</label>
+          <input
+            id="reviewName"
+            type="text"
+            maxlength="60"
+            required
+            placeholder="نام خود را وارد کنید"
+          >
+
+          <label for="reviewRating">امتیاز شما</label>
+          <select id="reviewRating" required>
+            <option value="5">۵ ستاره</option>
+            <option value="4">۴ ستاره</option>
+            <option value="3">۳ ستاره</option>
+            <option value="2">۲ ستاره</option>
+            <option value="1">۱ ستاره</option>
+          </select>
+
+          <label for="reviewComment">متن نظر</label>
+          <textarea
+            id="reviewComment"
+            maxlength="1000"
+            minlength="3"
+            required
+            placeholder="نظر خود درباره این کیف را بنویسید..."
+          ></textarea>
+
+          <button class="button" type="submit">ارسال نظر برای تأیید</button>
+        </form>
+
+        <p id="reviewMessage" role="status"></p>
+      </section>
       </section>
     </div>
   `;
