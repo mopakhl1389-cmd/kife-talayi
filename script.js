@@ -376,9 +376,15 @@ $("#removeImage").addEventListener("click", () => {
   imagePreview.hidden = true;
 });
 
+
 // ذخیره محصول جدید یا ویرایش محصول قبلی
-productForm.addEventListener("submit", event => {
+productForm.addEventListener("submit", async event => {
   event.preventDefault();
+
+  if (!isAdminLoggedIn) {
+    showToast("ابتدا وارد حساب مدیر شو.");
+    return;
+  }
 
   const name = $("#productName").value.trim();
   const price = Number($("#productPrice").value);
@@ -400,43 +406,50 @@ productForm.addEventListener("submit", event => {
     return;
   }
 
-  const previous = products.map(item => ({ ...item }));
-  const existing = id ? products.find(item => item.id === id) : null;
+  const saveButton = $("#saveProduct");
+  saveButton.disabled = true;
 
-  if (id && !existing) {
-    showToast("این محصول دیگر وجود ندارد.");
-    return;
+  try {
+    const productData = {
+      name,
+      price,
+      category,
+      description,
+      image: selectedImage
+    };
+
+    let result;
+
+    if (id) {
+      result = await supabaseClient
+        .from("products")
+        .update(productData)
+        .eq("id", Number(id))
+        .select()
+        .single();
+    } else {
+      result = await supabaseClient
+        .from("products")
+        .insert(productData)
+        .select()
+        .single();
+    }
+
+    if (result.error) throw result.error;
+
+    await loadProductsFromDatabase();
+
+    closeModal();
+    showToast(id ? "تغییرات ذخیره شد." : "محصول جدید اضافه شد.");
+
+  } catch (error) {
+    console.error("خطای ذخیره محصول:", error);
+    showToast("ذخیره محصول ناموفق بود. دوباره تلاش کن.");
+  } finally {
+    saveButton.disabled = false;
   }
-
-  const product = {
-    id: existing ? existing.id : (
-      window.crypto && typeof window.crypto.randomUUID === "function"
-        ? window.crypto.randomUUID()
-        : String(Date.now()) + Math.random().toString(16).slice(2)
-    ),
-    name,
-    price,
-    category,
-    description,
-    image: selectedImage,
-    createdAt: existing ? existing.createdAt : Date.now()
-  };
-
-  if (existing) {
-    products = products.map(item => item.id === id ? product : item);
-  } else {
-    products.unshift(product);
-  }
-
-  if (!saveProducts()) {
-    products = previous;
-    return;
-  }
-
-  closeModal();
-  renderProducts();
-  showToast(existing ? "تغییرات ذخیره شد." : "محصول جدید اضافه شد.");
 });
+
 
 // بازکردن پنل مدیریت
 $("#openAdmin").addEventListener("click", openLoginModal);
