@@ -88,6 +88,10 @@ function updateAdminButton() {
   const addButton = $("#addProductBtn");
   if (addButton) {
     addButton.hidden = !isAdminLoggedIn;
+      const reviewsButton = $("#manageReviewsBtn");
+  if (reviewsButton) {
+    reviewsButton.hidden = !isAdminLoggedIn;
+  }
   }
 }
 
@@ -761,17 +765,6 @@ startStore();
 const reviewsModal = document.querySelector("#reviewsModal");
 const manageReviewsBtn = document.querySelector("#manageReviewsBtn");
 const adminReviewsList = document.querySelector("#adminReviewsList");
-
-// نمایش دکمه فقط برای مدیر
-const oldUpdateAdminButton = updateAdminButton;
-
-updateAdminButton = function () {
-  oldUpdateAdminButton();
-
-  if (manageReviewsBtn) {
-    manageReviewsBtn.hidden = !isAdminLoggedIn;
-  }
-};
 
 // باز کردن پنجره نظرات
 manageReviewsBtn?.addEventListener("click", async () => {
