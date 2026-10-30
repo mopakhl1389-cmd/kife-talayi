@@ -1,6 +1,6 @@
 
 const SUPABASE_URL = "https://uystisrtgdxccfafpywq.supabase.co";
-const SUPABASE_KEY = "sb_publishable_YD1PiOewdGcb-EgijEiRFg_yJyF4Jqo";
+const SUPABASE_KEY = "sb_publishable_YD1PiOewdGcb-EgijRFg_yJyF4Jqo";
 
 const EITAA_LINK = "https://eitaa.com/KIF_TALAYY";
 const PHONE_NUMBER = "09126531424";
