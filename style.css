@@ -217,3 +217,7 @@ option{background:#171717}
  .product-grid{grid-template-columns:1fr}
  .product-gallery{height:230px}
 }
+
+#manageReviewsBtn[hidden] {
+  display: none !important;
+}
