@@ -1,162 +1,466 @@
+
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0b0912">
-  <meta name="description" content="فروشگاه کیف طلایی؛ مجموعه‌ای از کیف‌های شیک و خاص">
-  <title>کیف طلایی | فروشگاه کیف</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090909">
+  <meta name="description" content="کیف طلایی؛ فروش انواع کیف با طراحی شیک و کیفیت عالی">
+  <title>کیف طلایی | فروشگاه تخصصی کیف</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <header class="topbar">
-    <a href="#home" class="brand">✦ کیف <b>طلایی</b></a>
-    <nav>
-      <a href="#home">خانه</a>
-      <a href="#products">محصولات</a>
-      <a href="#contact">تماس با ما</a>
-    </nav>
-    <button id="openAdmin" class="button">⚙ مدیریت</button>
+
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <!-- سربرگ -->
+  <header class="site-header">
+    <div class="container header-inner">
+
+      <a href="#" class="brand">
+        <span class="brand-symbol">✦</span>
+        <span>
+          <strong>کیف طلایی</strong>
+          <small>GOLDEN BAG</small>
+        </span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#home">خانه</a>
+        <a href="#products-section">محصولات</a>
+        <a href="#about">درباره ما</a>
+        <a href="#contact">ارتباط با ما</a>
+      </nav>
+
+      <button id="openAdmin" class="admin-login" type="button">
+        ⚙ مدیریت
+      </button>
+
+    </div>
   </header>
 
   <main>
-    <section class="contact-strip" id="contact">
-      <span>📍 قم، بازار بزرگ، پاساژ حجت، زیرزمین، پلاک ۳</span>
-      <a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=قم+بازار+بزرگ+پاساژ+حجت">مسیریابی ↗</a>
-      <a href="tel:09126531424">📞 ۰۹۱۲۶۵۳۱۴۲۴</a>
-      <a target="_blank" rel="noopener" href="https://web.eitaa.com/#@Abediny1365">🛍️ سفارش در ایتا</a>
-    </section>
 
-    <section class="hero" id="home">
-      <div>
-        <span class="eyebrow">GOLDEN BAG COLLECTION</span>
-        <h1>استایل تو،<br><span>امضای خاص بودن</span></h1>
-        <p>کیف مورد علاقه‌ات رو از ویترین کیف طلایی پیدا کن.</p>
-        <a class="button" href="#products">دیدن محصولات ←</a>
-        <p class="stats"><strong id="heroCount">۰</strong> محصول در ویترین</p>
+    <!-- بنر اصلی -->
+    <section class="hero container" id="home">
+
+      <div class="hero-content">
+        <div class="hero-label">
+          <span></span>
+          تجربه‌ای متفاوت از انتخاب کیف
+        </div>
+
+        <h1>
+          زیبایی در جزئیات،
+          <span>شکوه در انتخاب</span>
+        </h1>
+
+        <p>
+          به دنیای کیف طلایی خوش آمدید؛
+          مجموعه‌ای از کیف‌های خاص و جذاب برای سلیقه‌های متفاوت.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#products-section" class="button hero-button">
+            مشاهده محصولات
+            <span>←</span>
+          </a>
+
+          <a href="https://web.eitaa.com/#@Abediny1365"
+             target="_blank"
+             rel="noopener"
+             class="hero-secondary">
+            ارتباط با فروشگاه
+          </a>
+        </div>
+
+        <div class="hero-stats">
+          <div>
+            <strong id="heroCount">۰</strong>
+            <span>محصول فروشگاه</span>
+          </div>
+          <div>
+            <strong>کیفیت</strong>
+            <span>انتخاب با دقت</span>
+          </div>
+          <div>
+            <strong>طلایی</strong>
+            <span>سبک متفاوت</span>
+          </div>
+        </div>
       </div>
-      <div class="hero-art">✦<small>GOLDEN BAG</small></div>
+
+      <div class="hero-art" aria-hidden="true">
+        <div class="hero-orbit orbit-one"></div>
+        <div class="hero-orbit orbit-two"></div>
+        <div class="hero-glow"></div>
+        <div class="hero-emblem">
+          <span>✦</span>
+          <strong>GOLDEN</strong>
+          <small>COLLECTION</small>
+        </div>
+        <div class="hero-decoration decoration-one">✧</div>
+        <div class="hero-decoration decoration-two">✦</div>
+      </div>
+
+      <div class="hero-bottom-line"></div>
     </section>
 
-    <section class="banner">
-      <span>✨ پیشنهاد ویژه کیف طلایی</span>
-      <strong>مدل دلخواهت رو پیدا کن؛ برای سفارش در ایتا پیام بده.</strong>
-      <a href="https://web.eitaa.com/#@Abediny1365" target="_blank" rel="noopener">سفارش محصول ←</a>
+    <!-- نوار معرفی -->
+    <section class="feature-strip container">
+      <div class="feature-item">
+        <span class="feature-icon">✦</span>
+        <div>
+          <strong>انتخاب خاص</strong>
+          <small>برای سلیقه‌های متفاوت</small>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <span class="feature-icon">◇</span>
+        <div>
+          <strong>تنوع محصولات</strong>
+          <small>مدل‌های متنوع کیف</small>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <span class="feature-icon">✧</span>
+        <div>
+          <strong>ارتباط مستقیم</strong>
+          <small>سفارش آسان و سریع</small>
+        </div>
+      </div>
     </section>
 
-    <section class="catalog" id="products">
+    <!-- محصولات -->
+    <section class="products-section container" id="products-section">
+
       <div class="section-heading">
         <div>
-          <span class="eyebrow">OUR COLLECTION</span>
-          <h2>ویترین محصولات</h2>
-          <p>جدیدترین انتخاب‌ها و پیشنهادهای ویژه</p>
+          <span class="eyebrow">GOLDEN COLLECTION</span>
+          <h2>کلکسیون محصولات</h2>
+          <p>محصول مورد علاقه‌ات رو پیدا کن.</p>
         </div>
-        <span><b id="resultCount">۰</b> محصول</span>
+
+        <div class="heading-decoration">✦</div>
       </div>
 
-      <div class="toolbar">
-        <input id="searchInput" type="search" placeholder="جست‌وجوی نام یا توضیحات کیف...">
-        <select id="sortSelect" aria-label="مرتب‌سازی">
+      <!-- جست‌وجو و مرتب‌سازی -->
+      <div class="shop-toolbar">
+
+        <div class="search-box">
+          <span>⌕</span>
+          <input
+            id="searchInput"
+            type="search"
+            placeholder="نام محصول یا دسته‌بندی را جست‌وجو کن..."
+            autocomplete="off"
+          >
+        </div>
+
+        <select id="sortSelect" aria-label="مرتب‌سازی محصولات">
           <option value="newest">جدیدترین</option>
           <option value="cheap">ارزان‌ترین</option>
           <option value="expensive">گران‌ترین</option>
           <option value="name">نام محصول</option>
         </select>
-        <button class="button secondary" id="favoritesFilter">♡ علاقه‌مندی‌ها</button>
+
+        <button id="favoritesFilter" class="filter-button" type="button">
+          ♡ علاقه‌مندی‌ها
+        </button>
+
       </div>
 
-      <div class="categories" id="categories">
-        <button class="category active" data-category="همه">همه</button>
-        <button class="category" data-category="دستی">کیف دستی</button>
-        <button class="category" data-category="دوشی">کیف دوشی</button>
-        <button class="category" data-category="مجلسی">کیف مجلسی</button>
-        <button class="category" data-category="کوله">کوله‌پشتی</button>
-        <button class="category" data-category="سایر">سایر</button>
+      <!-- دسته‌بندی -->
+      <div class="category-area">
+        <div class="category-label">دسته‌بندی محصولات</div>
+
+        <div id="categories" class="category-list">
+          <button class="category active" data-category="همه" type="button">
+            همه محصولات
+          </button>
+
+          <button class="category" data-category="زنانه" type="button">
+            زنانه
+          </button>
+
+          <button class="category" data-category="مردانه" type="button">
+            مردانه
+          </button>
+
+          <button class="category" data-category="دستی" type="button">
+            دستی
+          </button>
+
+          <button class="category" data-category="دوشی" type="button">
+            دوشی
+          </button>
+
+          <button class="category" data-category="کوله" type="button">
+            کوله
+          </button>
+        </div>
       </div>
 
-      <h3 class="subheading">✨ جدیدترین محصولات</h3>
-      <div class="product-grid" id="productGrid"></div>
+      <!-- تعداد نتایج -->
+      <div class="results-row">
+        <span>نمایش <strong id="resultCount">۰</strong> محصول</span>
+        <span class="results-line"></span>
+      </div>
+
+      <!-- محصولات از Supabase -->
+      <div id="productGrid" class="product-grid"></div>
+
+      <!-- حالت بدون محصول -->
       <div id="emptyState" class="empty-state" hidden>
-        محصولی پیدا نشد.
-        <button class="button secondary" id="clearSearch">نمایش همه</button>
+        <div class="empty-icon">◇</div>
+        <h3>محصولی پیدا نشد</h3>
+        <p>عبارت جست‌وجو یا دسته‌بندی را تغییر بده.</p>
+
+        <button id="clearSearch" class="button" type="button">
+          نمایش همه محصولات
+        </button>
       </div>
+
     </section>
 
-    <section class="about">
-      <span class="eyebrow">ABOUT GOLDEN BAG</span>
-      <h2>یک انتخاب کوچک، یک حس متفاوت.</h2>
-      <p>به ویترین کیف طلایی خوش اومدی؛ برای دیدن جزئیات و ثبت سفارش با ما در ارتباط باش.</p>
+    <!-- معرفی فروشگاه -->
+    <section class="about-section container" id="about">
+
+      <div class="about-decoration">G</div>
+
+      <div class="about-content">
+        <span class="eyebrow">ABOUT GOLDEN BAG</span>
+        <h2>انتخابی برای سلیقه‌های خاص</h2>
+
+        <p>
+          در کیف طلایی تلاش می‌کنیم مجموعه‌ای متنوع از کیف‌ها را
+          در اختیار شما قرار دهیم تا انتخابی متناسب با سلیقه خود داشته باشید.
+        </p>
+
+        <a href="https://web.eitaa.com/#@Abediny1365"
+           target="_blank"
+           rel="noopener"
+           class="button">
+          ارتباط با ما
+        </a>
+      </div>
+
     </section>
+
+    <!-- اطلاعات تماس -->
+    <section class="contact-section container" id="contact">
+
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">CONTACT US</span>
+          <h2>راه‌های ارتباط با ما</h2>
+          <p>برای سفارش و دریافت اطلاعات بیشتر با ما در ارتباط باش.</p>
+        </div>
+      </div>
+
+      <div class="contact-grid">
+
+        <a class="contact-card"
+           href="https://web.eitaa.com/#@Abediny1365"
+           target="_blank"
+           rel="noopener">
+          <span class="contact-icon">✉</span>
+          <strong>ایتا</strong>
+          <small>پیام و ثبت سفارش</small>
+        </a>
+
+        <a class="contact-card" href="tel:09126531424">
+          <span class="contact-icon">☎</span>
+          <strong>تماس تلفنی</strong>
+          <small>۰۹۱۲۶۵۳۱۴۲۴</small>
+        </a>
+
+        <a class="contact-card"
+           href="https://www.google.com/maps/search/?api=1&query=قم+بازار+بزرگ+پاساژ+حجت"
+           target="_blank"
+           rel="noopener">
+          <span class="contact-icon">⌖</span>
+          <strong>آدرس فروشگاه</strong>
+          <small>قم، بازار بزرگ، پاساژ حجت، زیرزمین، پلاک ۳</small>
+        </a>
+
+      </div>
+
+    </section>
+
   </main>
 
-  <footer class="footer">
-    <div><b>✦ کیف طلایی</b><p>قم، بازار بزرگ، پاساژ حجت، زیرزمین، پلاک ۳</p></div>
-    <div class="footer-links">
-      <a href="tel:09126531424">تماس با فروشگاه</a>
-      <a href="https://web.eitaa.com/#@Abediny1365" target="_blank" rel="noopener">کانال / سفارش ایتا</a>
+  <!-- فوتر -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+
+      <div class="footer-brand">
+        <span>✦ کیف طلایی</span>
+        <small>GOLDEN BAG</small>
+      </div>
+
+      <p>زیبایی در جزئیات، شکوه در انتخاب</p>
+
+      <span class="copyright">
+        © تمامی حقوق برای فروشگاه کیف طلایی محفوظ است.
+      </span>
+
     </div>
-    <small>© کیف طلایی</small>
   </footer>
 
-  <!-- ورود مدیر -->
-  <div class="modal" id="loginModal" hidden>
-    <section class="modal-card">
-      <button class="close-button" data-close-login>×</button>
-      <h2>ورود مدیر فروشگاه</h2>
+  <!-- پنجره ورود مدیر -->
+  <div id="loginModal" class="modal" hidden>
+    <div class="modal-backdrop" data-close-login></div>
+
+    <div class="modal-content login-content">
+
+      <button class="modal-close" type="button" data-close-login>
+        ×
+      </button>
+
+      <div class="modal-symbol">✦</div>
+
+      <span class="eyebrow">ADMIN ACCESS</span>
+      <h2>ورود مدیریت</h2>
+      <p>برای مدیریت محصولات وارد حساب مدیر شو.</p>
+
       <form id="loginForm">
-        <label>ایمیل مدیر</label>
-        <input class="field" id="adminEmail" type="email" required autocomplete="username">
-        <label>رمز عبور</label>
-        <input class="field" id="adminPassword" type="password" required autocomplete="current-password">
-        <button class="button full" type="submit">ورود</button>
+
+        <label for="adminEmail">ایمیل مدیر</label>
+        <input
+          id="adminEmail"
+          type="email"
+          placeholder="ایمیل"
+          autocomplete="username"
+          required
+        >
+
+        <label for="adminPassword">رمز عبور</label>
+        <input
+          id="adminPassword"
+          type="password"
+          placeholder="رمز عبور"
+          autocomplete="current-password"
+          required
+        >
+
+        <button type="submit" class="button modal-submit">
+          ورود به پنل مدیریت
+        </button>
+
       </form>
-    </section>
+
+    </div>
   </div>
 
-  <!-- فرم محصول -->
-  <div class="modal" id="productModal" hidden>
-    <section class="modal-card">
-      <button class="close-button" data-close-modal>×</button>
-      <h2 id="modalTitle">افزودن محصول</h2>
+  <!-- پنجره افزودن و ویرایش محصول -->
+  <div id="productModal" class="modal" hidden>
+    <div class="modal-backdrop" data-close-modal></div>
+
+    <div class="modal-content product-modal-content">
+
+      <button class="modal-close" type="button" data-close-modal>
+        ×
+      </button>
+
+      <div class="modal-heading">
+        <span class="eyebrow">GOLDEN BAG MANAGEMENT</span>
+        <h2 id="modalTitle">افزودن محصول</h2>
+        <p>اطلاعات محصول را با دقت وارد کن.</p>
+      </div>
+
       <form id="productForm">
+
         <input id="productId" type="hidden">
-        <label>نام کیف *</label>
-        <input class="field" id="productName" maxlength="80" required>
+
+        <label for="productName">نام محصول</label>
+        <input
+          id="productName"
+          type="text"
+          placeholder="مثلاً کیف دستی زنانه"
+          required
+        >
+
         <div class="form-row">
+
           <div>
-            <label>قیمت (تومان) *</label>
-            <input class="field" id="productPrice" type="number" min="0" required>
+            <label for="productPrice">قیمت به تومان</label>
+            <input
+              id="productPrice"
+              type="number"
+              min="0"
+              placeholder="مثلاً 850000"
+              required
+            >
           </div>
+
           <div>
-            <label>تخفیف (درصد)</label>
-            <input class="field" id="productDiscount" type="number" min="0" max="99" value="0">
+            <label for="productDiscount">درصد تخفیف</label>
+            <input
+              id="productDiscount"
+              type="number"
+              min="0"
+              max="99"
+              value="0"
+              placeholder="۰"
+            >
           </div>
+
         </div>
-        <label>دسته‌بندی</label>
-        <select class="field" id="productCategory">
-          <option value="دستی">کیف دستی</option>
-          <option value="دوشی">کیف دوشی</option>
-          <option value="مجلسی">کیف مجلسی</option>
-          <option value="کوله">کوله‌پشتی</option>
-          <option value="سایر">سایر</option>
+
+        <label for="productCategory">دسته‌بندی</label>
+        <select id="productCategory" required>
+          <option value="">انتخاب دسته‌بندی</option>
+          <option value="زنانه">زنانه</option>
+          <option value="مردانه">مردانه</option>
+          <option value="دستی">دستی</option>
+          <option value="دوشی">دوشی</option>
+          <option value="کوله">کوله</option>
         </select>
-        <label>توضیحات و رنگ‌ها</label>
-        <textarea class="field" id="productDescription" maxlength="500" rows="3"></textarea>
-        <label>عکس‌های محصول (حداکثر ۵ عکس)</label>
-        <input class="field" id="productImages" type="file" accept="image/jpeg,image/png,image/webp" multiple>
-        <small class="hint">هر عکس حداکثر ۲ مگابایت باشد. برای نگه‌داشتن عکس‌های قبلی، عکس جدید انتخاب نکن.</small>
-        <div id="adminImagePreview" class="admin-preview"></div>
-        <div class="form-row">
-          <button class="button secondary" type="button" data-close-modal>انصراف</button>
-          <button class="button" id="saveProduct" type="submit">ذخیره محصول</button>
-        </div>
+
+        <label for="productDescription">توضیحات محصول</label>
+        <textarea
+          id="productDescription"
+          rows="4"
+          placeholder="توضیحات کوتاه درباره محصول..."
+        ></textarea>
+
+        <label for="productImages">تصاویر محصول (حداکثر ۵ عکس)</label>
+        <input
+          id="productImages"
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          multiple
+        >
+
+        <div id="adminImagePreview" class="image-preview"></div>
+
+        <button id="saveProduct" type="submit" class="button modal-submit">
+          ذخیره محصول
+        </button>
+
       </form>
-    </section>
+
+    </div>
   </div>
 
-  <div id="toast" class="toast" role="status"></div>
+  <!-- پیام‌های سایت -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
+  <!-- کتابخانه Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- کد فروشگاه -->
   <script src="script.js"></script>
+
 </body>
 </html>
