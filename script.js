@@ -95,7 +95,8 @@ if (reviewsButton) {
   reviewsButton.hidden = !isAdminLoggedIn;
   reviewsButton.style.display = isAdminLoggedIn ? "" : "none";
 }
-
+}
+  
 // دریافت محصولات
 async function loadProductsFromDatabase() {
   const { data, error } = await supabaseClient
