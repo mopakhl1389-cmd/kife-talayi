@@ -70,6 +70,7 @@ let products = [];
 let activeCategory = "همه";
 let selectedImage = "";
 let toastTimeout;
+let isAdminLoggedIn = false;
 
 // بارگذاری محصولات ذخیره‌شده
 function loadProducts() {
