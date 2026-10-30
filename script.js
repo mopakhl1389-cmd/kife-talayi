@@ -1,12 +1,13 @@
+
 "use strict";
 
 // تنظیمات Supabase
 const SUPABASE_URL = "https://uystisrtgdxccfafpywq.supabase.co";
-
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_YD1PiOewdGcb-EgijEiRFg_yJyF4Jqo";
-
 const ADMIN_UID = "6f42f9ba-fae7-42f0-a062-bb3eec8aa99d";
 const BUCKET = "product-images";
+
+const EITAA_LINK = "https://eitaa.com/KIF_TALAYY";
 
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
@@ -31,6 +32,7 @@ let selectedFiles = [];
 let currentImages = [];
 let toastTimer;
 
+// پیام اطلاع‌رسانی
 function showToast(message) {
   toast.textContent = message;
   toast.classList.add("show");
@@ -54,6 +56,7 @@ function saveFavorites() {
   localStorage.setItem("golden-favorites", JSON.stringify(favorites));
 }
 
+// مدیریت پنجره‌ها
 function closeProductModal() {
   productModal.hidden = true;
   document.body.style.overflow = "";
@@ -74,11 +77,18 @@ function openProductModal() {
   document.body.style.overflow = "hidden";
 }
 
+// وضعیت مدیر
 function updateAdminButton() {
   const button = $("#openAdmin");
   button.textContent = isAdminLoggedIn ? "خروج مدیر" : "⚙ مدیریت";
+
+  const addButton = $("#addProductBtn");
+  if (addButton) {
+    addButton.hidden = !isAdminLoggedIn;
+  }
 }
 
+// دریافت محصولات
 async function loadProductsFromDatabase() {
   const { data, error } = await supabaseClient
     .from("products")
@@ -102,6 +112,7 @@ async function loadProductsFromDatabase() {
   renderProducts();
 }
 
+// ساخت کارت محصول
 function createProductCard(product) {
   const card = document.createElement("article");
   card.className = "product-card";
@@ -209,7 +220,7 @@ function createProductCard(product) {
   const order = document.createElement("a");
   order.className = "button";
   order.textContent = "سفارش در ایتا";
-  order.href = "https://web.eitaa.com/#@Abediny1365";
+  order.href = EITAA_LINK;
   order.target = "_blank";
   order.rel = "noopener";
 
@@ -219,8 +230,8 @@ function createProductCard(product) {
   call.className = "button secondary";
   call.textContent = "تماس";
   call.href = "tel:09126531424";
-  actions.append(call);
 
+  actions.append(call);
   info.append(title, description, price, actions);
 
   if (isAdminLoggedIn) {
@@ -247,6 +258,7 @@ function createProductCard(product) {
   return card;
 }
 
+// نمایش محصولات
 function renderProducts() {
   const query = $("#searchInput").value.trim().toLocaleLowerCase("fa");
 
@@ -291,17 +303,21 @@ function renderProducts() {
   productGrid.hidden = filtered.length === 0;
 }
 
+// فرم محصول
 function resetProductForm() {
   productForm.reset();
   $("#productId").value = "";
   $("#productDiscount").value = "0";
   $("#modalTitle").textContent = "افزودن محصول";
+
   selectedFiles = [];
   currentImages = [];
+
   $("#adminImagePreview").replaceChildren();
   $("#productImages").value = "";
 }
 
+// ویرایش محصول
 function openEditModal(product) {
   resetProductForm();
 
@@ -325,6 +341,7 @@ function openEditModal(product) {
   openProductModal();
 }
 
+// آپلود تصاویر
 async function uploadImages(files) {
   const uploadedUrls = [];
 
@@ -352,6 +369,7 @@ async function uploadImages(files) {
   return uploadedUrls;
 }
 
+// انتخاب تصاویر
 $("#productImages").addEventListener("change", event => {
   const files = Array.from(event.target.files || []);
 
@@ -391,6 +409,7 @@ $("#productImages").addEventListener("change", event => {
   });
 });
 
+// ذخیره محصول
 productForm.addEventListener("submit", async event => {
   event.preventDefault();
 
@@ -430,7 +449,7 @@ productForm.addEventListener("submit", async event => {
 
     if (selectedFiles.length) {
       const uploaded = await uploadImages(selectedFiles);
-      images = uploaded;
+      images = images.concat(uploaded);
     }
 
     const productData = {
@@ -476,6 +495,7 @@ productForm.addEventListener("submit", async event => {
   }
 });
 
+// حذف محصول
 async function deleteProduct(id) {
   if (!isAdminLoggedIn) {
     showToast("ابتدا وارد حساب مدیر شو.");
@@ -531,6 +551,9 @@ $("#loginForm").addEventListener("submit", async event => {
   updateAdminButton();
   renderProducts();
   showToast("ورود مدیر موفق بود.");
+
+  // بعد از ورود، فرم افزودن محصول باز می‌شود
+  resetProductForm();
   openProductModal();
 });
 
@@ -539,16 +562,21 @@ async function checkAdminSession() {
   const { data } = await supabaseClient.auth.getSession();
   const user = data.session?.user;
 
-  if (user && user.id === ADMIN_UID) {
-    isAdminLoggedIn = true;
-  } else {
-    isAdminLoggedIn = false;
-  }
+  isAdminLoggedIn = !!(user && user.id === ADMIN_UID);
 
   updateAdminButton();
   renderProducts();
 }
 
+// دکمه افزودن کیف در نوار بالا
+$("#addProductBtn").addEventListener("click", () => {
+  if (!isAdminLoggedIn) return;
+
+  resetProductForm();
+  openProductModal();
+});
+
+// ورود و خروج مدیر
 $("#openAdmin").addEventListener("click", async () => {
   if (isAdminLoggedIn) {
     await supabaseClient.auth.signOut();
@@ -581,6 +609,7 @@ document.addEventListener("keydown", event => {
 $("#searchInput").addEventListener("input", renderProducts);
 $("#sortSelect").addEventListener("change", renderProducts);
 
+// دسته‌بندی
 $("#categories").addEventListener("click", event => {
   const button = event.target.closest("[data-category]");
   if (!button) return;
@@ -594,8 +623,10 @@ $("#categories").addEventListener("click", event => {
   renderProducts();
 });
 
+// علاقه‌مندی‌ها
 $("#favoritesFilter").addEventListener("click", () => {
   favoritesOnly = !favoritesOnly;
+
   $("#favoritesFilter").textContent = favoritesOnly
     ? "نمایش همه محصولات"
     : "♡ علاقه‌مندی‌ها";
@@ -603,6 +634,7 @@ $("#favoritesFilter").addEventListener("click", () => {
   renderProducts();
 });
 
+// پاک کردن فیلترها
 $("#clearSearch").addEventListener("click", () => {
   $("#searchInput").value = "";
   activeCategory = "همه";
