@@ -422,7 +422,7 @@ productForm.addEventListener("submit", event => {
 });
 
 // بازکردن پنل مدیریت
-$("#openAdmin").addEventListener("click", openAddModal);
+$("#openAdmin").addEventListener("click", openLoginModal);
 
 // بستن پنجره با دکمه‌ها و پس‌زمینه
 document.querySelectorAll("[data-close-modal]").forEach(element => {
@@ -485,6 +485,67 @@ for (let i = 0; i < 24; i++) {
   particle.style.animationDuration = `${6 + (i % 7)}s`;
   particleContainer.append(particle);
 }
+
+
+// ورود مدیر فروشگاه
+const loginModal = $("#loginModal");
+const loginForm = $("#loginForm");
+
+function openLoginModal() {
+  loginForm.reset();
+  loginModal.hidden = false;
+  document.body.style.overflow = "hidden";
+  $("#adminEmail").focus();
+}
+
+function closeLoginModal() {
+  loginModal.hidden = true;
+  document.body.style.overflow = "";
+}
+
+// بستن پنجره ورود
+document.querySelectorAll("[data-close-login]").forEach(element => {
+  element.addEventListener("click", closeLoginModal);
+});
+
+// بررسی اطلاعات ورود مدیر
+loginForm.addEventListener("submit", async event => {
+  event.preventDefault();
+
+  const email = $("#adminEmail").value.trim();
+  const password = $("#adminPassword").value;
+
+  const submitButton = loginForm.querySelector('[type="submit"]');
+  submitButton.disabled = true;
+  submitButton.textContent = "در حال بررسی...";
+
+  try {
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    if (error) throw error;
+
+    // فقط حساب مدیر اصلی اجازه ورود به پنل دارد
+    if (data.user.id !== "6f42f9ba-fae7-42f0-a062-bb3eec8aa99d") {
+      await supabaseClient.auth.signOut();
+      showToast("این حساب اجازه مدیریت فروشگاه را ندارد.");
+      return;
+    }
+
+    closeLoginModal();
+    showToast("ورود مدیر موفق بود.");
+    openAddModal();
+
+  } catch (error) {
+    console.error("خطای ورود:", error.message);
+    showToast("ایمیل یا رمز عبور اشتباه است.");
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = "ورود به مدیریت ←";
+  }
+});
 
 // آزمایش اتصال به دیتابیس
 async function testSupabaseConnection() {
