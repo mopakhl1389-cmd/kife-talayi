@@ -467,6 +467,7 @@ const price = priceValue === "" ? null : Number(priceValue);
   const discount = Number($("#productDiscount").value);
   const category = $("#productCategory").value;
   const stock = Number($("#productStock").value);
+  const color = $("#productColor").value;
   const description = $("#productDescription").value.trim();
   const saveButton = $("#saveProduct");
 
@@ -505,7 +506,8 @@ const productData = {
   name,
   price,
   discount,
-  stock,
+    stock,
+  color,
   category,
   description,
   images,
