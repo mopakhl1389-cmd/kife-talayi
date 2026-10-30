@@ -105,6 +105,41 @@
         </div>
       </div>
 
+      
+<div class="shop-filters">
+  <div class="filter-group">
+    <label for="colorFilter">رنگ کیف</label>
+    <select id="colorFilter">
+      <option value="">همه رنگ‌ها</option>
+      <option value="مشکی">مشکی</option>
+      <option value="قهوه‌ای">قهوه‌ای</option>
+      <option value="کرم">کرم</option>
+      <option value="سفید">سفید</option>
+      <option value="عسلی">عسلی</option>
+      <option value="سرمه‌ای">سرمه‌ای</option>
+      <option value="طوسی">طوسی</option>
+      <option value="قرمز">قرمز</option>
+      <option value="صورتی">صورتی</option>
+      <option value="سبز">سبز</option>
+      <option value="سایر">سایر</option>
+    </select>
+  </div>
+
+  <div class="filter-group">
+    <label for="minPriceFilter">حداقل قیمت (تومان)</label>
+    <input id="minPriceFilter" type="number" min="0" placeholder="مثلاً 500000">
+  </div>
+
+  <div class="filter-group">
+    <label for="maxPriceFilter">حداکثر قیمت (تومان)</label>
+    <input id="maxPriceFilter" type="number" min="0" placeholder="مثلاً 1000000">
+  </div>
+
+  <button id="clearFilters" class="filter-button" type="button">
+    پاک کردن فیلترها
+  </button>
+</div>
+
       <div class="results-row"><span>نمایش <strong id="resultCount">۰</strong> محصول</span><span class="results-line"></span></div>
       <div id="productGrid" class="product-grid"></div>
 
