@@ -38,6 +38,7 @@
       <button id="addProductBtn" class="add-product-btn" type="button" hidden>
         ＋ افزودن کیف
       </button>
+      <button id="manageReviewsBtn" class="admin-login" type="button" hidden>مدیریت نظرات</button>
 
       <button id="openAdmin" class="admin-login" type="button">⚙ مدیریت</button>
     </div>
@@ -199,6 +200,14 @@
     </div>
   </div>
 
+  <div id="reviewsModal" class="modal" hidden>
+  <div class="modal-content">
+    <button class="modal-close" type="button" data-close-reviews>×</button>
+    <p class="eyebrow">مدیریت فروشگاه</p>
+    <h2>مدیریت نظرات مشتریان</h2>
+    <div id="adminReviewsList">در حال دریافت نظرات...</div>
+  </div>
+</div>
   <div id="productModal" class="modal" hidden>
     <div class="modal-backdrop" data-close-modal></div>
     <div class="modal-content product-modal-content">
