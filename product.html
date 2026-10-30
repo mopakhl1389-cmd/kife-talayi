@@ -1,1 +1,103 @@
 
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>جزئیات محصول | کیف طلایی</title>
+  <link rel="icon" type="image/png" href="Luxury%20Gold%20Handbag%20Icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .detail-page {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    .detail-back {
+      display: inline-block;
+      margin-bottom: 24px;
+      color: var(--gold2);
+      text-decoration: none;
+    }
+    .detail-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+    .detail-gallery, .detail-info {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 20px;
+    }
+    .detail-main-image {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: contain;
+      border-radius: 14px;
+      background: var(--panel2);
+    }
+    .detail-thumbnails {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .detail-thumb {
+      width: 70px;
+      height: 70px;
+      object-fit: cover;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .detail-info h1 { color: var(--gold2); margin: 12px 0; }
+    .detail-category { color: var(--muted); }
+    .detail-description {
+      color: var(--text);
+      line-height: 2;
+      white-space: pre-wrap;
+      margin: 20px 0;
+    }
+    .detail-price {
+      color: var(--gold2);
+      font-size: 24px;
+      font-weight: 800;
+      margin: 18px 0;
+    }
+    .detail-old-price {
+      color: var(--muted);
+      text-decoration: line-through;
+      font-size: 15px;
+      margin-right: 8px;
+    }
+    .detail-stock { color: var(--gold); margin: 14px 0; }
+    .detail-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+    .detail-actions a {
+      display: inline-block;
+      text-decoration: none;
+      text-align: center;
+    }
+    .detail-message { color: var(--muted); text-align: center; padding: 40px 10px; }
+    @media (max-width: 700px) {
+      .detail-layout { grid-template-columns: 1fr; }
+      .detail-page { padding: 14px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="detail-page">
+    <a class="detail-back" href="index.html#products">← بازگشت به محصولات</a>
+
+    <div id="productContent" class="detail-message">در حال بارگذاری محصول...</div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="product.js"></script>
+</body>
+</html>
+
