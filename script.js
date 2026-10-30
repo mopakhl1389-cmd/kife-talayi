@@ -90,10 +90,10 @@ function updateAdminButton() {
     addButton.hidden = !isAdminLoggedIn;
   }
 
-  const reviewsButton = $("#manageReviewsBtn");
-  if (reviewsButton) {
-    reviewsButton.hidden = !isAdminLoggedIn;
-  }
+const reviewsButton = $("#manageReviewsBtn");
+if (reviewsButton) {
+  reviewsButton.hidden = !isAdminLoggedIn;
+  reviewsButton.style.display = isAdminLoggedIn ? "" : "none";
 }
 
 // دریافت محصولات
