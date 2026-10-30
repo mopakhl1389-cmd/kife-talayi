@@ -367,6 +367,7 @@ function openEditModal(product) {
   $("#productPrice").value = product.price;
   $("#productDiscount").value = product.discount || 0;
 $("#productStock").value = Number(product.stock) || 0;
+  $("#productColor").value = product.color || "";
   $("#productCategory").value = product.category;
   $("#productDescription").value = product.description || "";
   $("#modalTitle").textContent = "ویرایش محصول";
