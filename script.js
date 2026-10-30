@@ -339,6 +339,8 @@ function resetProductForm() {
   productForm.reset();
   $("#productId").value = "";
   $("#productDiscount").value = "0";
+$("#productStock").value = "0";
+  
   $("#modalTitle").textContent = "افزودن محصول";
 
   selectedFiles = [];
@@ -356,6 +358,7 @@ function openEditModal(product) {
   $("#productName").value = product.name;
   $("#productPrice").value = product.price;
   $("#productDiscount").value = product.discount || 0;
+$("#productStock").value = Number(product.stock) || 0;
   $("#productCategory").value = product.category;
   $("#productDescription").value = product.description || "";
   $("#modalTitle").textContent = "ویرایش محصول";
@@ -455,6 +458,7 @@ productForm.addEventListener("submit", async event => {
 const price = priceValue === "" ? null : Number(priceValue);
   const discount = Number($("#productDiscount").value);
   const category = $("#productCategory").value;
+  const stock = Number($("#productStock").value);
   const description = $("#productDescription").value.trim();
   const saveButton = $("#saveProduct");
 
@@ -468,6 +472,11 @@ const price = priceValue === "" ? null : Number(priceValue);
     return;
   }
 
+  if (!Number.isInteger(stock) || stock < 0) {
+  showToast("موجودی باید یک عدد صحیح و صفر یا بیشتر باشد.");
+  return;
+}
+  
   if (selectedFiles.length && currentImages.length + selectedFiles.length > 5) {
     showToast("مجموع عکس‌های محصول نباید بیشتر از ۵ تا باشد.");
     return;
@@ -484,16 +493,16 @@ const price = priceValue === "" ? null : Number(priceValue);
       images = images.concat(uploaded);
     }
 
-    const productData = {
-      name,
-      price,
-      discount,
-      category,
-      description,
-      images,
-      image: images[0] || ""
-    };
-
+const productData = {
+  name,
+  price,
+  discount,
+  stock,
+  category,
+  description,
+  images,
+  image: images[0] || ""
+};
     let result;
 
     if (id) {
