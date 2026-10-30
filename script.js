@@ -130,6 +130,10 @@ function createProductCard(product) {
   image.className = "product-image";
   image.alt = product.name;
   image.loading = "lazy";
+  image.style.cursor = "pointer";
+image.addEventListener("click", () => {
+  window.location.href = `product.html?id=${encodeURIComponent(product.id)}`;
+});
 
   if (images.length) {
     image.src = images[0];
@@ -224,6 +228,10 @@ function createProductCard(product) {
 
   const title = document.createElement("h3");
   title.textContent = product.name;
+  title.style.cursor = "pointer";
+title.addEventListener("click", () => {
+  window.location.href = `product.html?id=${encodeURIComponent(product.id)}`;
+});
 
   const description = document.createElement("p");
   description.textContent = product.description || "برای اطلاعات بیشتر پیام بده.";
