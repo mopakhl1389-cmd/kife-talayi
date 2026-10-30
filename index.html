@@ -1,99 +1,72 @@
-
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0b0912">
   <meta name="description" content="فروشگاه کیف طلایی؛ مجموعه‌ای از کیف‌های شیک و خاص">
   <title>کیف طلایی | فروشگاه کیف</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="ambient ambient-one"></div>
-  <div class="ambient ambient-two"></div>
-  <div id="particles" class="particles"></div>
-
   <header class="topbar">
-    <a href="#" class="brand" aria-label="صفحه اصلی کیف طلایی">
-      <span class="brand-icon">✦</span>
-      <span>کیف <b>طلایی</b><small>انتخابی برای خاص بودن</small></span>
-    </a>
-
-    <nav class="nav-links">
+    <a href="#home" class="brand">✦ کیف <b>طلایی</b></a>
+    <nav>
       <a href="#home">خانه</a>
       <a href="#products">محصولات</a>
-      <a href="#about">درباره ما</a>
+      <a href="#contact">تماس با ما</a>
     </nav>
-
-    <button class="admin-button" id="openAdmin">
-      <span>⚙</span> مدیریت محصولات
-    </button>
+    <button id="openAdmin" class="button">⚙ مدیریت</button>
   </header>
 
   <main>
-    <section class="hero" id="home">
-      <div class="hero-content">
-        <span class="eyebrow"><span class="live-dot"></span> COLLECTION · کیف طلایی</span>
-        <h1>استایل تو،<br>امضای <span>خاص بودن</span></h1>
-        <p>
-          کیف مورد علاقه‌ات را پیدا کن؛
-          مجموعه‌ای از انتخاب‌های شیک برای هر روز و هر سلیقه.
-        </p>
-        <a class="primary-button" href="#products">دیدن محصولات <span>←</span></a>
-
-        <div class="hero-stats">
-          <div><strong id="heroCount">۰</strong><small>محصول در ویترین</small></div>
-          <div class="stat-divider"></div>
-          <div><strong>خاص</strong><small>برای سلیقه تو</small></div>
-        </div>
-      </div>
-
-      <div class="hero-art">
-        <div class="orbit orbit-one"></div>
-        <div class="orbit orbit-two"></div>
-        <div class="hero-glow"></div>
-        <div class="hero-symbol">K</div>
-        <div class="hero-caption">
-          <span>GOLDEN BAG</span>
-          <small>YOUR STYLE · YOUR STORY</small>
-        </div>
-        <div class="floating-tag">✧ انتخاب خاص تو</div>
-      </div>
+    <section class="contact-strip" id="contact">
+      <span>📍 قم، بازار بزرگ، پاساژ حجت، زیرزمین، پلاک ۳</span>
+      <a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=قم+بازار+بزرگ+پاساژ+حجت">مسیریابی ↗</a>
+      <a href="tel:09126531424">📞 ۰۹۱۲۶۵۳۱۴۲۴</a>
+      <a target="_blank" rel="noopener" href="https://web.eitaa.com/#@Abediny1365">🛍️ سفارش در ایتا</a>
     </section>
 
-    <section class="benefits">
-      <div><span>✧</span><div><b>انتخاب متنوع</b><small>برای هر سلیقه</small></div></div>
-      <div><span>◇</span><div><b>قیمت شفاف</b><small>قیمت مشخص هر محصول</small></div></div>
-      <div><span>♡</span><div><b>خرید آسان</b><small>ساده و سریع</small></div></div>
+    <section class="hero" id="home">
+      <div>
+        <span class="eyebrow">GOLDEN BAG COLLECTION</span>
+        <h1>استایل تو،<br><span>امضای خاص بودن</span></h1>
+        <p>کیف مورد علاقه‌ات رو از ویترین کیف طلایی پیدا کن.</p>
+        <a class="button" href="#products">دیدن محصولات ←</a>
+        <p class="stats"><strong id="heroCount">۰</strong> محصول در ویترین</p>
+      </div>
+      <div class="hero-art">✦<small>GOLDEN BAG</small></div>
+    </section>
+
+    <section class="banner">
+      <span>✨ پیشنهاد ویژه کیف طلایی</span>
+      <strong>مدل دلخواهت رو پیدا کن؛ برای سفارش در ایتا پیام بده.</strong>
+      <a href="https://web.eitaa.com/#@Abediny1365" target="_blank" rel="noopener">سفارش محصول ←</a>
     </section>
 
     <section class="catalog" id="products">
       <div class="section-heading">
         <div>
-          <span class="eyebrow">THE COLLECTION</span>
-          <h2>ویترین <span>محصولات</span></h2>
-          <p>کیف دلخواهت رو از اینجا پیدا کن.</p>
+          <span class="eyebrow">OUR COLLECTION</span>
+          <h2>ویترین محصولات</h2>
+          <p>جدیدترین انتخاب‌ها و پیشنهادهای ویژه</p>
         </div>
-        <div class="catalog-count"><span id="resultCount">۰</span> محصول</div>
+        <span><b id="resultCount">۰</b> محصول</span>
       </div>
 
-      <div class="search-panel">
-        <label class="search-box">
-          <span>⌕</span>
-          <input id="searchInput" type="search" placeholder="اسم کیف یا مدلش رو جست‌وجو کن..." autocomplete="off">
-          <kbd>جست‌وجو</kbd>
-        </label>
-        <select id="sortSelect" aria-label="مرتب‌سازی محصولات">
+      <div class="toolbar">
+        <input id="searchInput" type="search" placeholder="جست‌وجوی نام یا توضیحات کیف...">
+        <select id="sortSelect" aria-label="مرتب‌سازی">
           <option value="newest">جدیدترین</option>
           <option value="cheap">ارزان‌ترین</option>
           <option value="expensive">گران‌ترین</option>
           <option value="name">نام محصول</option>
         </select>
+        <button class="button secondary" id="favoritesFilter">♡ علاقه‌مندی‌ها</button>
       </div>
 
       <div class="categories" id="categories">
-        <button class="category active" data-category="همه">همه محصولات</button>
+        <button class="category active" data-category="همه">همه</button>
         <button class="category" data-category="دستی">کیف دستی</button>
         <button class="category" data-category="دوشی">کیف دوشی</button>
         <button class="category" data-category="مجلسی">کیف مجلسی</button>
@@ -101,128 +74,89 @@
         <button class="category" data-category="سایر">سایر</button>
       </div>
 
+      <h3 class="subheading">✨ جدیدترین محصولات</h3>
       <div class="product-grid" id="productGrid"></div>
-
-      <div class="empty-state" id="emptyState" hidden>
-        <div class="empty-icon">⌕</div>
-        <h3>محصولی پیدا نشد!</h3>
-        <p>عبارت جست‌وجو یا دسته‌بندی رو تغییر بده.</p>
-        <button class="secondary-button" id="clearSearch">نمایش همه محصولات</button>
+      <div id="emptyState" class="empty-state" hidden>
+        محصولی پیدا نشد.
+        <button class="button secondary" id="clearSearch">نمایش همه</button>
       </div>
     </section>
 
-    <section class="about" id="about">
-      <div class="about-mark">✦</div>
-      <div>
-        <span class="eyebrow">ABOUT GOLDEN BAG</span>
-        <h2>یک انتخاب کوچک،<br><span>یک حس متفاوت.</span></h2>
-        <p>به ویترین کیف طلایی خوش اومدی. محصولات این مجموعه برای کمک به انتخاب راحت‌تر تو کنار هم قرار گرفتن.</p>
-      </div>
-      <a class="outline-button" href="#products">گشتن در ویترین ←</a>
+    <section class="about">
+      <span class="eyebrow">ABOUT GOLDEN BAG</span>
+      <h2>یک انتخاب کوچک، یک حس متفاوت.</h2>
+      <p>به ویترین کیف طلایی خوش اومدی؛ برای دیدن جزئیات و ثبت سفارش با ما در ارتباط باش.</p>
     </section>
   </main>
 
   <footer class="footer">
-    <a href="#home" class="brand footer-brand">
-      <span class="brand-icon">✦</span>
-      <span>کیف <b>طلایی</b><small>انتخابی برای خاص بودن</small></span>
-    </a>
-    <p>© کیف طلایی · تمامی حقوق محفوظ است.</p>
-    <a href="#home">بازگشت به بالا ↑</a>
+    <div><b>✦ کیف طلایی</b><p>قم، بازار بزرگ، پاساژ حجت، زیرزمین، پلاک ۳</p></div>
+    <div class="footer-links">
+      <a href="tel:09126531424">تماس با فروشگاه</a>
+      <a href="https://web.eitaa.com/#@Abediny1365" target="_blank" rel="noopener">کانال / سفارش ایتا</a>
+    </div>
+    <small>© کیف طلایی</small>
   </footer>
 
-  
-  <!-- پنجره ورود مدیر -->
+  <!-- ورود مدیر -->
   <div class="modal" id="loginModal" hidden>
-    <div class="modal-backdrop" data-close-login></div>
-    <section class="modal-card" role="dialog" aria-modal="true">
-      <div class="modal-heading">
-        <div>
-          <span class="eyebrow">ADMIN LOGIN</span>
-          <h2>ورود مدیر فروشگاه</h2>
-        </div>
-        <button class="close-button" type="button" data-close-login>×</button>
-      </div>
-
+    <section class="modal-card">
+      <button class="close-button" data-close-login>×</button>
+      <h2>ورود مدیر فروشگاه</h2>
       <form id="loginForm">
-        <label class="field-label" for="adminEmail">ایمیل مدیر</label>
-        <input class="field" id="adminEmail" type="email"
-          autocomplete="username" required placeholder="ایمیل حساب مدیر">
-
-        <label class="field-label" for="adminPassword">رمز عبور</label>
-        <input class="field" id="adminPassword" type="password"
-          autocomplete="current-password" required placeholder="رمز عبور">
-
-        <div class="form-actions">
-          <button class="secondary-button" type="button" data-close-login>انصراف</button>
-          <button class="primary-button" type="submit">ورود به مدیریت ←</button>
-        </div>
+        <label>ایمیل مدیر</label>
+        <input class="field" id="adminEmail" type="email" required autocomplete="username">
+        <label>رمز عبور</label>
+        <input class="field" id="adminPassword" type="password" required autocomplete="current-password">
+        <button class="button full" type="submit">ورود</button>
       </form>
     </section>
   </div>
 
-  <!-- پنل افزودن و ویرایش محصول -->
+  <!-- فرم محصول -->
   <div class="modal" id="productModal" hidden>
-    <div class="modal-backdrop" data-close-modal></div>
-    <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <div class="modal-heading">
-        <div>
-          <span class="eyebrow">STORE MANAGEMENT</span>
-          <h2 id="modalTitle">افزودن محصول جدید</h2>
-        </div>
-        <button class="close-button" data-close-modal aria-label="بستن">×</button>
-      </div>
-
+    <section class="modal-card">
+      <button class="close-button" data-close-modal>×</button>
+      <h2 id="modalTitle">افزودن محصول</h2>
       <form id="productForm">
-        <input type="hidden" id="productId">
-
-        <label class="field-label" for="productName">نام کیف *</label>
-        <input class="field" id="productName" maxlength="80" required placeholder="مثلاً کیف دستی مشکی">
-
+        <input id="productId" type="hidden">
+        <label>نام کیف *</label>
+        <input class="field" id="productName" maxlength="80" required>
         <div class="form-row">
           <div>
-            <label class="field-label" for="productPrice">قیمت به تومان *</label>
-            <input class="field" id="productPrice" type="number" min="0" step="1000" required placeholder="1250000">
+            <label>قیمت (تومان) *</label>
+            <input class="field" id="productPrice" type="number" min="0" required>
           </div>
           <div>
-            <label class="field-label" for="productCategory">دسته‌بندی</label>
-            <select class="field" id="productCategory">
-              <option value="دستی">کیف دستی</option>
-              <option value="دوشی">کیف دوشی</option>
-              <option value="مجلسی">کیف مجلسی</option>
-              <option value="کوله">کوله‌پشتی</option>
-              <option value="سایر">سایر</option>
-            </select>
+            <label>تخفیف (درصد)</label>
+            <input class="field" id="productDiscount" type="number" min="0" max="99" value="0">
           </div>
         </div>
-
-        <label class="field-label" for="productDescription">توضیحات</label>
-        <textarea class="field" id="productDescription" maxlength="300" rows="3" placeholder="رنگ، جنس، اندازه و توضیحات کیف..."></textarea>
-
-        <label class="field-label" for="productImage">عکس محصول</label>
-        <label class="upload-area" for="productImage">
-          <span class="upload-icon">＋</span>
-          <b>انتخاب عکس از کامپیوتر</b>
-          <small>JPG، PNG یا WEBP · حداکثر ۲ مگابایت</small>
-        </label>
-        <input id="productImage" type="file" accept="image/jpeg,image/png,image/webp" hidden>
-        <div id="imagePreview" class="image-preview" hidden>
-          <img id="previewImg" alt="پیش‌نمایش عکس محصول">
-          <button type="button" id="removeImage" class="remove-image">حذف عکس انتخاب‌شده ×</button>
-        </div>
-
-        <p class="form-note">محصولات این نسخه در مرورگر همین دستگاه ذخیره می‌شوند.</p>
-
-        <div class="form-actions">
-          <button type="button" class="secondary-button" data-close-modal>انصراف</button>
-          <button type="submit" class="primary-button" id="saveProduct">ذخیره محصول <span>←</span></button>
+        <label>دسته‌بندی</label>
+        <select class="field" id="productCategory">
+          <option value="دستی">کیف دستی</option>
+          <option value="دوشی">کیف دوشی</option>
+          <option value="مجلسی">کیف مجلسی</option>
+          <option value="کوله">کوله‌پشتی</option>
+          <option value="سایر">سایر</option>
+        </select>
+        <label>توضیحات و رنگ‌ها</label>
+        <textarea class="field" id="productDescription" maxlength="500" rows="3"></textarea>
+        <label>عکس‌های محصول (حداکثر ۵ عکس)</label>
+        <input class="field" id="productImages" type="file" accept="image/jpeg,image/png,image/webp" multiple>
+        <small class="hint">هر عکس حداکثر ۲ مگابایت باشد. برای نگه‌داشتن عکس‌های قبلی، عکس جدید انتخاب نکن.</small>
+        <div id="adminImagePreview" class="admin-preview"></div>
+        <div class="form-row">
+          <button class="button secondary" type="button" data-close-modal>انصراف</button>
+          <button class="button" id="saveProduct" type="submit">ذخیره محصول</button>
         </div>
       </form>
     </section>
   </div>
 
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="script.js"></script>
+  <div id="toast" class="toast" role="status"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js"></script>
 </body>
 </html>
