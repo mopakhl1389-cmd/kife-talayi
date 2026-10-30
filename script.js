@@ -66,7 +66,7 @@ const demoProducts = [
   }
 ];
 
-let products = loadProducts();
+let products = [];
 let activeCategory = "همه";
 let selectedImage = "";
 let toastTimeout;
@@ -547,22 +547,35 @@ loginForm.addEventListener("submit", async event => {
   }
 });
 
-// آزمایش اتصال به دیتابیس
-async function testSupabaseConnection() {
+
+// دریافت محصولات از دیتابیس Supabase
+async function loadProductsFromDatabase() {
+  productGrid.hidden = true;
+
   const { data, error } = await supabaseClient
     .from("products")
     .select("*")
-    .limit(1);
+    .order("created_at", { ascending: false });
 
   if (error) {
-    console.error("خطای اتصال به دیتابیس:", error.message);
-    showToast("اتصال دیتابیس ناموفق بود؛ کنسول را بررسی کن.");
+    console.error("خطای دریافت محصولات:", error.message);
+    showToast("دریافت محصولات ناموفق بود.");
     return;
   }
 
-  console.log("اتصال موفق است:", data);
+  products = data.map(item => ({
+    id: String(item.id),
+    name: item.name,
+    price: Number(item.price),
+    category: item.category,
+    description: item.description || "",
+    image: item.image || "",
+    createdAt: new Date(item.created_at).getTime()
+  }));
+
+  renderProducts();
 }
 
-testSupabaseConnection();
 // نمایش اولیه فروشگاه
-renderProducts();
+loadProductsFromDatabase();
+
