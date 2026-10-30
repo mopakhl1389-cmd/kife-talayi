@@ -3,7 +3,7 @@
 
 // تنظیمات Supabase
 const SUPABASE_URL = "https://uystisrtgdxccfafpywq.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_YD1PiOewdGcb-EgijRFg_yJyF4Jqo";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_YD1PiOewdGcb-EgijEiRFg_yJyF4Jqo";
 const ADMIN_UID = "6f42f9ba-fae7-42f0-a062-bb3eec8aa99d";
 const BUCKET = "product-images";
 
