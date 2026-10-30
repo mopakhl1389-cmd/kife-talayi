@@ -131,6 +131,36 @@
     <a href="#home">بازگشت به بالا ↑</a>
   </footer>
 
+  
+  <!-- پنجره ورود مدیر -->
+  <div class="modal" id="loginModal" hidden>
+    <div class="modal-backdrop" data-close-login></div>
+    <section class="modal-card" role="dialog" aria-modal="true">
+      <div class="modal-heading">
+        <div>
+          <span class="eyebrow">ADMIN LOGIN</span>
+          <h2>ورود مدیر فروشگاه</h2>
+        </div>
+        <button class="close-button" type="button" data-close-login>×</button>
+      </div>
+
+      <form id="loginForm">
+        <label class="field-label" for="adminEmail">ایمیل مدیر</label>
+        <input class="field" id="adminEmail" type="email"
+          autocomplete="username" required placeholder="ایمیل حساب مدیر">
+
+        <label class="field-label" for="adminPassword">رمز عبور</label>
+        <input class="field" id="adminPassword" type="password"
+          autocomplete="current-password" required placeholder="رمز عبور">
+
+        <div class="form-actions">
+          <button class="secondary-button" type="button" data-close-login>انصراف</button>
+          <button class="primary-button" type="submit">ورود به مدیریت ←</button>
+        </div>
+      </form>
+    </section>
+  </div>
+
   <!-- پنل افزودن و ویرایش محصول -->
   <div class="modal" id="productModal" hidden>
     <div class="modal-backdrop" data-close-modal></div>
