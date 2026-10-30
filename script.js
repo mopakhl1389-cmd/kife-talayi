@@ -332,7 +332,8 @@ function renderProducts() {
   product.name,
   product.description,
   product.category,
-  product.color
+  product.color,
+  ...(Array.isArray(product.colors) ? product.colors : [])
 ].join(" "));
 
 const matchesSearch = text.includes(query);
@@ -343,8 +344,12 @@ const matchesSearch = text.includes(query);
     const matchesFavorite =
       !favoritesOnly || favorites.includes(product.id);
 
-    const matchesColor =
-      !selectedColor || product.color === selectedColor;
+    const productColors = Array.isArray(product.colors) && product.colors.length
+  ? product.colors
+  : (product.color ? [product.color] : []);
+
+const matchesColor =
+  !selectedColor || productColors.includes(selectedColor);
 
     const price = product.price === null || product.price === ""
       ? null
@@ -398,6 +403,9 @@ const matchesSearch = text.includes(query);
 // فرم محصول
 function resetProductForm() {
   productForm.reset();
+  document.querySelectorAll('input[name="productColors"]').forEach(input => {
+  input.checked = false;
+});
   $("#productId").value = "";
   $("#productDiscount").value = "0";
 $("#productStock").value = "0";
@@ -420,7 +428,13 @@ function openEditModal(product) {
   $("#productPrice").value = product.price;
   $("#productDiscount").value = product.discount || 0;
 $("#productStock").value = Number(product.stock) || 0;
-  $("#productColor").value = product.color || "";
+  const savedColors = Array.isArray(product.colors) && product.colors.length
+  ? product.colors
+  : (product.color ? [product.color] : []);
+
+document.querySelectorAll('input[name="productColors"]').forEach(input => {
+  input.checked = savedColors.includes(input.value);
+});
   $("#productCategory").value = product.category;
   $("#productDescription").value = product.description || "";
   $("#modalTitle").textContent = "ویرایش محصول";
@@ -521,7 +535,11 @@ const price = priceValue === "" ? null : Number(priceValue);
   const discount = Number($("#productDiscount").value);
   const category = $("#productCategory").value;
   const stock = Number($("#productStock").value);
-  const color = $("#productColor").value;
+  const colors = Array.from(
+  document.querySelectorAll('input[name="productColors"]:checked')
+).map(input => input.value);
+
+const color = colors[0] || "";
   const description = $("#productDescription").value.trim();
   const saveButton = $("#saveProduct");
 
@@ -560,8 +578,9 @@ const productData = {
   name,
   price,
   discount,
-    stock,
+  stock,
   color,
+  colors,
   category,
   description,
   images,
