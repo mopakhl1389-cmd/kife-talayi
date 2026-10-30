@@ -139,7 +139,31 @@ function createProductCard(product) {
   }
 
   gallery.append(image);
+  const stock = Number(product.stock) || 0;
 
+  const stockBadge = document.createElement("span");
+  stockBadge.className = "stock-badge";
+  stockBadge.textContent = stock > 0
+    ? `موجودی: ${money.format(stock)} عدد`
+    : "ناموجود";
+
+  stockBadge.style.cssText = `
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 3;
+    padding: 7px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    color: ${stock > 0 ? "#f3d27a" : "#ffffff"};
+    background: ${stock > 0 ? "rgba(20, 20, 20, 0.9)" : "rgba(120, 25, 25, 0.92)"};
+    border: 1px solid ${stock > 0 ? "#b99545" : "#a94444"};
+  `;
+
+  gallery.style.position = "relative";
+  gallery.append(stockBadge);
+  
   if (images.length > 1) {
     const controls = document.createElement("div");
     controls.className = "gallery-controls";
