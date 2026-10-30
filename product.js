@@ -280,11 +280,11 @@ async function loadProduct() {
     .eq("id", productId)
     .maybeSingle();
 
-  if (error) {
-    console.error(error);
-    content.textContent = "دریافت اطلاعات محصول با مشکل مواجه شد.";
-    return;
-  }
+if (error) {
+  console.error("خطای دریافت محصول:", error);
+  content.textContent = "خطا: " + error.message;
+  return;
+}
 
   if (!data) {
     content.textContent = "این محصول پیدا نشد.";
