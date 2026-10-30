@@ -305,8 +305,19 @@ if (product.price === null || product.price === "") {
 
 
 // نمایش محصولات
+function normalizeSearch(value) {
+  return String(value ?? "")
+    .toLocaleLowerCase("fa")
+    .replace(/[يى]/g, "ی")
+    .replace(/ك/g, "ک")
+    .replace(/[ۀة]/g, "ه")
+    .replace(/[\u064B-\u065F\u0670]/g, "")
+    .replace(/[\u200c\u200f\u200e]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
 function renderProducts() {
-  const query = $("#searchInput").value.trim().toLocaleLowerCase("fa");
+  const query = normalizeSearch($("#searchInput").value);
 
   const selectedColor = $("#colorFilter").value;
   console.log("رنگ انتخابی فیلتر:", selectedColor, "رنگ محصولات:", products.map(p => p.color));
@@ -317,13 +328,14 @@ function renderProducts() {
   const maxPrice = maxPriceValue === "" ? null : Number(maxPriceValue);
 
   let filtered = products.filter(product => {
-    const text = [
-      product.name,
-      product.description,
-      product.category
-    ].join(" ").toLocaleLowerCase("fa");
+   const text = normalizeSearch([
+  product.name,
+  product.description,
+  product.category,
+  product.color
+].join(" "));
 
-    const matchesSearch = text.includes(query);
+const matchesSearch = text.includes(query);
 
     const matchesCategory =
       activeCategory === "همه" || product.category === activeCategory;
