@@ -302,8 +302,13 @@ function closeModal() {
   document.body.style.overflow = "";
 }
 
-// حذف محصول
-function deleteProduct(id) {
+
+async function deleteProduct(id) {
+  if (!isAdminLoggedIn) {
+    showToast("ابتدا وارد حساب مدیر شو.");
+    return;
+  }
+
   const product = products.find(item => item.id === id);
   if (!product) return;
 
@@ -313,14 +318,18 @@ function deleteProduct(id) {
 
   if (!confirmed) return;
 
-  const previous = products;
-  products = products.filter(item => item.id !== id);
+  const { error } = await supabaseClient
+    .from("products")
+    .delete()
+    .eq("id", id);
 
-  if (!saveProducts()) {
-    products = previous;
+  if (error) {
+    console.error("خطای حذف:", error.message);
+    showToast("حذف محصول ناموفق بود.");
     return;
   }
 
+  products = products.filter(item => item.id !== id);
   renderProducts();
   showToast("محصول با موفقیت حذف شد.");
 }
