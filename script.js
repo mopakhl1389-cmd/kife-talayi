@@ -88,10 +88,11 @@ function updateAdminButton() {
   const addButton = $("#addProductBtn");
   if (addButton) {
     addButton.hidden = !isAdminLoggedIn;
-      const reviewsButton = $("#manageReviewsBtn");
+  }
+
+  const reviewsButton = $("#manageReviewsBtn");
   if (reviewsButton) {
     reviewsButton.hidden = !isAdminLoggedIn;
-  }
   }
 }
 
