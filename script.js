@@ -755,3 +755,170 @@ async function startStore() {
 }
 
 startStore();
+
+// ===== مدیریت نظرات مشتریان =====
+
+const reviewsModal = document.querySelector("#reviewsModal");
+const manageReviewsBtn = document.querySelector("#manageReviewsBtn");
+const adminReviewsList = document.querySelector("#adminReviewsList");
+
+// نمایش دکمه فقط برای مدیر
+const oldUpdateAdminButton = updateAdminButton;
+
+updateAdminButton = function () {
+  oldUpdateAdminButton();
+
+  if (manageReviewsBtn) {
+    manageReviewsBtn.hidden = !isAdminLoggedIn;
+  }
+};
+
+// باز کردن پنجره نظرات
+manageReviewsBtn?.addEventListener("click", async () => {
+  if (!isAdminLoggedIn) return;
+
+  reviewsModal.hidden = false;
+  document.body.style.overflow = "hidden";
+  await loadAdminReviews();
+});
+
+// بستن پنجره
+document.querySelectorAll("[data-close-reviews]").forEach(button => {
+  button.addEventListener("click", () => {
+    reviewsModal.hidden = true;
+    document.body.style.overflow = "";
+  });
+});
+
+// دریافت نظرات
+async function loadAdminReviews() {
+  if (!isAdminLoggedIn) return;
+
+  adminReviewsList.textContent = "در حال دریافت نظرات...";
+
+  const { data: reviews, error } = await supabaseClient
+    .from("reviews")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error(error);
+    adminReviewsList.textContent = "دریافت نظرات ناموفق بود.";
+    return;
+  }
+
+  const { data: productData } = await supabaseClient
+    .from("products")
+    .select("id,name");
+
+  const productNames = new Map(
+    (productData || []).map(product => [String(product.id), product.name])
+  );
+
+  adminReviewsList.replaceChildren();
+
+  if (!reviews || reviews.length === 0) {
+    adminReviewsList.textContent = "هنوز نظری ثبت نشده است.";
+    return;
+  }
+
+  reviews.forEach(review => {
+    const card = document.createElement("div");
+    card.style.cssText = `
+      padding: 14px;
+      margin: 12px 0;
+      border: 1px solid rgba(217,173,82,.3);
+      border-radius: 12px;
+      background: #191714;
+      color: #f6f0e5;
+    `;
+
+    const title = document.createElement("h3");
+    title.textContent = review.customer_name;
+
+    const product = document.createElement("p");
+    product.textContent =
+      "محصول: " + (productNames.get(String(review.product_id)) || "محصول حذف‌شده");
+
+    const rating = document.createElement("p");
+    rating.textContent = "امتیاز: " + "★".repeat(review.rating);
+
+    const comment = document.createElement("p");
+    comment.textContent = review.comment;
+
+    const status = document.createElement("p");
+    status.textContent = review.is_approved ? "وضعیت: تأیید شده" : "وضعیت: در انتظار تأیید";
+
+    card.append(title, product, rating, comment, status);
+
+    if (!review.is_approved) {
+      const approve = document.createElement("button");
+      approve.type = "button";
+      approve.className = "button";
+      approve.textContent = "تأیید نظر";
+
+      approve.addEventListener("click", () => approveReview(review.id));
+
+      card.append(approve);
+    }
+
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.className = "button secondary";
+    remove.textContent = "حذف نظر";
+    remove.style.marginRight = "8px";
+
+    remove.addEventListener("click", () => deleteReview(review.id));
+
+    card.append(remove);
+    adminReviewsList.append(card);
+  });
+}
+
+// تأیید نظر
+async function approveReview(id) {
+  if (!isAdminLoggedIn) return;
+
+  const { error } = await supabaseClient
+    .from("reviews")
+    .update({ is_approved: true })
+    .eq("id", id);
+
+  if (error) {
+    console.error(error);
+    showToast("تأیید نظر ناموفق بود.");
+    return;
+  }
+
+  showToast("نظر تأیید شد.");
+  await loadAdminReviews();
+}
+
+// حذف نظر
+async function deleteReview(id) {
+  if (!isAdminLoggedIn) return;
+
+  if (!confirm("این نظر حذف شود؟")) return;
+
+  const { error } = await supabaseClient
+    .from("reviews")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    console.error(error);
+    showToast("حذف نظر ناموفق بود.");
+    return;
+  }
+
+  showToast("نظر حذف شد.");
+  await loadAdminReviews();
+}
+
+// بستن با کلید Escape
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape" && reviewsModal && !reviewsModal.hidden) {
+    reviewsModal.hidden = true;
+    document.body.style.overflow = "";
+  }
+});
