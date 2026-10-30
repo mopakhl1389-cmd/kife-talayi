@@ -694,6 +694,18 @@ document.addEventListener("keydown", event => {
 // جست‌وجو و مرتب‌سازی
 $("#searchInput").addEventListener("input", renderProducts);
 $("#sortSelect").addEventListener("change", renderProducts);
+// فیلتر رنگ و محدوده قیمت
+$("#colorFilter").addEventListener("change", renderProducts);
+$("#minPriceFilter").addEventListener("input", renderProducts);
+$("#maxPriceFilter").addEventListener("input", renderProducts);
+
+// پاک کردن فیلترها
+$("#clearFilters").addEventListener("click", () => {
+  $("#colorFilter").value = "";
+  $("#minPriceFilter").value = "";
+  $("#maxPriceFilter").value = "";
+  renderProducts();
+});
 
 // دسته‌بندی
 $("#categories").addEventListener("click", event => {
